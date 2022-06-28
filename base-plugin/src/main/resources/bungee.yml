@@ -1,0 +1,4 @@
+name: BungeeUtils
+main: me.daarkii.bungee.bungee.BungeeHook
+version: 1.0.1
+author: Daarkii

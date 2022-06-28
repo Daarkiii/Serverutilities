@@ -1,0 +1,24 @@
+# Select you storage provider here (mysql or mongodb)
+storage: mysql
+debug: false
+
+# Insert your Mysql data if you want to use it
+mysql:
+  host: localhost
+  port: '3306'
+  database: bungee
+  user: 'admin'
+  password: ''
+  maxConnections: 10
+
+# Insert your MongoDB data if you want to use it
+mongo:
+  # Change this to false if your Mongo database is not on the same server
+  isOnLocalhost: true
+  host: localhost
+  port: '27017'
+  database: bungee
+  # You don't need to insert the user and the password if your mongo database is on the same server
+  # This will be ignored if "isOnLocalhost" is true
+  user: 'admin'
+  password: ''
