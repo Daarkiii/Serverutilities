@@ -10,7 +10,7 @@ import java.io.File
  * Addons main class must implement this addon class
  *
  *
- * Every addon must be placed in the corresponding addon folder of the DBUtil plugin
+ * Every addon must be placed in the corresponding addon folder of this plugin
  * This resource will then find the main class, which must implement the onStart method
  * and create a new instance of the class.
  *

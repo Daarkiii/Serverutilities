@@ -23,6 +23,8 @@ abstract class BungeeSystem(
     //Storage
     private lateinit var mySQL: MySQL
     private lateinit var mongoDB: MongoDB
+
+    //Manages Addons and loads them
     private lateinit var addonHandler: AddonHandler
 
     //Files
@@ -63,7 +65,6 @@ abstract class BungeeSystem(
         //enable Addons
         this.addonHandler = AddonHandler(this)
         this.addonHandler.loadAddons()
-
     }
 
     fun isInDebugMode() : Boolean {
@@ -94,13 +95,24 @@ abstract class BungeeSystem(
         instance = bs
     }
 
+    /**
+     * Disables this plugin
+     */
     protected abstract fun shutdown()
 
+    /**
+     * Gets a Console Object for a specified Platform
+     * @return a CompletableFuture<Console> with the Console object
+     */
     abstract fun getConsole() : CompletableFuture<Console>
 
-    abstract fun getUser(uuid: UUID) : CompletableFuture<User>
+    /**
+     * Gets a Console Object for a specified Platform
+     * @return a CompletableFuture<Console> with the Console object
+     */
+    abstract fun getUser(uuid: UUID) : CompletableFuture<User?>
 
-    abstract fun getOfflineUser(uuid: UUID) : CompletableFuture<OfflineUser>
+    abstract fun getOfflineUser(uuid: UUID) : CompletableFuture<OfflineUser?>
 
     companion object {
         private var instance: BungeeSystem? = null

@@ -32,15 +32,15 @@ class BungeeImpl(private val bungee: BungeeHook) : BungeeSystem(
         this.bungee.proxy.stop()
     }
 
-    override fun getConsole(): Console {
-        return BungeeConsole(bungeeAudiences, this.bungee.proxy.console)
+    override fun getConsole(): CompletableFuture<Console> {
+        return CompletableFuture.supplyAsync { BungeeConsole(bungeeAudiences, this.bungee.proxy.console) }
     }
 
-    override fun getUser(uuid: UUID): CompletableFuture<User> {
+    override fun getUser(uuid: UUID): CompletableFuture<User?> {
         return CompletableFuture()
     }
 
-    override fun getOfflineUser(uuid: UUID): CompletableFuture<OfflineUser> {
+    override fun getOfflineUser(uuid: UUID): CompletableFuture<OfflineUser?> {
         return CompletableFuture()
     }
 
