@@ -96,7 +96,7 @@ abstract class BungeeSystem(
 
     protected abstract fun shutdown()
 
-    abstract fun getConsole() : Console
+    abstract fun getConsole() : CompletableFuture<Console>
 
     abstract fun getUser(uuid: UUID) : CompletableFuture<User>
 

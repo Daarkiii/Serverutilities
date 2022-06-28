@@ -5,6 +5,9 @@ import me.daarkii.bungee.core.BungeeSystem
 import me.daarkii.bungee.core.utils.Logger
 import net.md_5.bungee.api.chat.TextComponent
 
+/**
+ * Implementation of the Logger from this plugin for the BungeeCord Platform
+ */
 class BungeeLogger(private val proxy: BungeeHook) : Logger {
 
     /**

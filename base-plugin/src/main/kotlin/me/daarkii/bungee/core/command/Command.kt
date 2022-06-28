@@ -9,7 +9,7 @@ abstract class Command(
     private vararg val aliases: String
 ) {
 
-    abstract fun execute(sender: CommandSender, args: Array<String>)
+    abstract fun execute(sender: CommandSender, args: Array<out String>)
 
     open fun handleTabCompletion(sender: CommandSender, args: Array<String>) : Iterable<String> {
         return Collections.emptyList()

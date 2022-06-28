@@ -11,6 +11,9 @@ import net.kyori.adventure.platform.bungeecord.BungeeAudiences
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
+/**
+ * Implementation of the BungeeSystem Main Class for the BungeeCord Platform
+ */
 class BungeeImpl(private val bungee: BungeeHook) : BungeeSystem(
     BungeeLogger(bungee),
     bungee.dataFolder,
