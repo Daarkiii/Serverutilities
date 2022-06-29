@@ -27,8 +27,16 @@ allprojects {
 subprojects {
 
     dependencies {
+
         //Kotlin
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.0-Beta")
+
+        //CloudNet
+        val version = "3.4.0-RELEASE"
+
+        compileOnly("de.dytanic.cloudnet:cloudnet-driver:$version")
+        compileOnly("de.dytanic.cloudnet:cloudnet-cloudperms:$version")
+        compileOnly("de.dytanic.cloudnet:cloudnet-bridge:$version")
     }
 
     tasks.withType<KotlinCompile> {

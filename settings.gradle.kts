@@ -1,3 +1,5 @@
 
 rootProject.name = "OpenSourceBungee"
-include("base-plugin")
+include("core")
+include("bukkit")
+include("bungeecord")

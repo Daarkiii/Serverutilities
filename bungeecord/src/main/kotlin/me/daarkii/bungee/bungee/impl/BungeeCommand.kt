@@ -16,7 +16,9 @@ class BungeeCommand(private val command: me.daarkii.bungee.core.command.Command)
     override fun execute(sender: CommandSender?, args: Array<out String>?) {
 
         if(sender!! is ProxiedPlayer) {
-            BungeeSystem.getInstance().getUser((sender as ProxiedPlayer).uniqueId).thenAccept { user -> command.execute(user, args!!) }
+            BungeeSystem.getInstance().getUser((sender as ProxiedPlayer).uniqueId).thenAccept { user ->
+                if(user != null)
+                    command.execute(user, args!!) }
             return
         }
 
