@@ -4,26 +4,24 @@ import me.daarkii.bungee.core.`object`.CommandSender
 import java.util.*
 
 abstract class Command(
-    private val name: String,
-    private val permission: String,
-    private vararg val aliases: String
+    private val nameObj: String,
+    private val permissionObj: String,
+    private vararg val aliasesObj: String
 ) {
 
     abstract fun execute(sender: CommandSender, args: Array<out String>)
 
-    open fun handleTabCompletion(sender: CommandSender, args: Array<String>) : Iterable<String> {
+    open fun handleTabCompletion(sender: CommandSender, args: Array<out String>) : MutableIterable<String> {
         return Collections.emptyList()
     }
 
-    fun getName() : String {
-        return name
-    }
+    val name: String
+        get() = nameObj
 
-    fun getPermission() : String {
-        return permission
-    }
+    val permission: String
+        get() = permissionObj
 
-    fun getAliases() : MutableList<String> {
-        return mutableListOf(*aliases)
-    }
+    val aliases: MutableList<String>
+        get() = mutableListOf(*aliasesObj)
+
 }

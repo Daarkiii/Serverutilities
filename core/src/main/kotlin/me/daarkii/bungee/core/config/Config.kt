@@ -5,11 +5,11 @@ import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 
-abstract class Config(private val file: File, private val location: String) {
+abstract class Config(private val fileObj: File, private val location: String) {
 
     private val loader: ClassLoader = this.javaClass.classLoader
-    private val name: String = this.file.name
-    private lateinit var configuration: YamlFile
+    private val nameObj: String = this.file.name
+    private lateinit var configurationObj: YamlFile
 
     init {
         this.load()
@@ -25,27 +25,24 @@ abstract class Config(private val file: File, private val location: String) {
      *
      * @return this file for this config
      */
-    fun getFile() : File {
-        return file
-    }
+    val file: File
+        get() = fileObj
 
     /**
      * Gets the Name of the Config
      *
      * @return the Name of the Config file
      */
-    fun getName() : String {
-        return name
-    }
+    val name: String
+        get() = nameObj
 
     /**
      * Gets the YamlFile of the Config
      *
      * @return the YamlFile of the Config
      */
-    fun getConfiguration() : YamlFile {
-        return configuration
-    }
+    val configuration: YamlFile
+        get() = configurationObj
 
     /**
      * Gets a String from the Config with replaced Color codes
@@ -121,7 +118,7 @@ abstract class Config(private val file: File, private val location: String) {
             }
         }
 
-        configuration = YamlFile(file)
+        configurationObj = YamlFile(file)
 
         kotlin.runCatching {
             configuration.loadWithComments()

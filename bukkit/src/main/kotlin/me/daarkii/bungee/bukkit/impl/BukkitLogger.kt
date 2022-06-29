@@ -1,21 +1,17 @@
-package me.daarkii.bungee.bungee.impl
+package me.daarkii.bungee.bukkit.impl
 
-import me.daarkii.bungee.bungee.BungeeHook
 import me.daarkii.bungee.core.BungeeSystem
 import me.daarkii.bungee.core.utils.Logger
-import net.md_5.bungee.api.chat.TextComponent
+import org.bukkit.plugin.java.JavaPlugin
 
-/**
- * Implementation of the Logger from this plugin for the BungeeCord Platform
- */
-class BungeeLogger(private val proxy: BungeeHook) : Logger {
+class BukkitLogger(private val bukkit: JavaPlugin) : Logger {
 
     /**
      * Sends a message to the Console
      * @param msg the Message to send
      */
     override fun sendConsoleMessage(msg: String) {
-        proxy.proxy.console.sendMessage(TextComponent(msg))
+        bukkit.server.consoleSender.sendMessage(msg)
     }
 
     /**
@@ -23,9 +19,7 @@ class BungeeLogger(private val proxy: BungeeHook) : Logger {
      * @param msg the Message to send
      */
     override fun sendMessage(msg: String) {
-        proxy.proxy.players.forEach { player ->
-            player.sendMessage(TextComponent(msg))
-        }
+        bukkit.server.onlinePlayers.forEach { player -> player.sendMessage(msg) }
     }
 
     /**
@@ -34,9 +28,9 @@ class BungeeLogger(private val proxy: BungeeHook) : Logger {
      * @param permission the permission which the player needs
      */
     override fun sendMessage(msg: String, permission: String) {
-        proxy.proxy.players.forEach { player ->
+        bukkit.server.onlinePlayers.forEach { player ->
             if(player.hasPermission(permission))
-                player.sendMessage(TextComponent(msg))
+                player.sendMessage(msg)
         }
     }
 
@@ -48,7 +42,7 @@ class BungeeLogger(private val proxy: BungeeHook) : Logger {
         if(!BungeeSystem.getInstance().debugMode)
             return
 
-        proxy.proxy.console.sendMessage(TextComponent("§a§lBungee-DEBUG §8» §6$msg"))
+        this.sendConsoleMessage("§a§lBungee-DEBUG §8» §6$msg")
     }
 
     /**
@@ -56,7 +50,7 @@ class BungeeLogger(private val proxy: BungeeHook) : Logger {
      * @param msg the Message to send
      */
     override fun sendWarning(msg: String) {
-        proxy.proxy.console.sendMessage(TextComponent("§6§lBungee-WARNING §8» §6$msg"))
+        this.sendConsoleMessage("§6§lBungee-WARNING §8» §6$msg")
     }
 
     /**
@@ -64,6 +58,7 @@ class BungeeLogger(private val proxy: BungeeHook) : Logger {
      * @param msg the Message to send
      */
     override fun sendError(msg: String) {
-        proxy.proxy.console.sendMessage(TextComponent("§c§lBungee-ERROR §8» §c$msg"))
+        this.sendConsoleMessage("§6§l§c§lBungee-ERROR §8» §c$msg §8» §6$msg")
     }
+
 }

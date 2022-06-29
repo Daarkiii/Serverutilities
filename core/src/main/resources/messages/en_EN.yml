@@ -1,0 +1,6 @@
+# English Config File
+
+messages:
+  prefix: '&a&lBungee &8| &7'
+  user:
+    noperms: "[Prefix]&7You have &cno &7rights to do that"

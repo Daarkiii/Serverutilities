@@ -6,10 +6,10 @@ interface User : CommandSender, GenericUser {
 
     fun kick(reason: String)
 
-    fun getAddress() : String
+    val address: String
 
-    fun getServerName() : String
+    val serverName: String
 
-    fun getPing() : Int
+    val ping: Int
 
 }

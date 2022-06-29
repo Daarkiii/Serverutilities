@@ -13,19 +13,15 @@ import java.io.File
  * Every addon must be placed in the corresponding addon folder of this plugin
  * This resource will then find the main class, which must implement the onStart method
  * and create a new instance of the class.
- *
- * @author Devin
- * @version 1.0.0
  */
 
 abstract class Addon(
     private val info: AddonInfo
 ) {
 
-    private val name = info.getName()
     private val bungeeSystem = BungeeSystem.getInstance()
-    private val classLoader = this.javaClass.classLoader
-    private val dataFolder = File(bungeeSystem.getDataFolder().absolutePath + "/addons/" + name)
+    private val classLoaderObject = this.javaClass.classLoader
+    private val dataFolderObject = File(bungeeSystem.dataFolder.absolutePath + "/addons/" + name)
 
     open fun onStart() {
     }
@@ -33,28 +29,23 @@ abstract class Addon(
     open fun onEnd() {
     }
 
-    fun getDataFolder() : File {
-        return dataFolder
-    }
+    val dataFolder: File
+        get() = dataFolderObject
 
-    fun getName() : String {
-        return this.name
-    }
+    val name: String
+        get() = info.name
 
-    fun getSystem() : BungeeSystem {
-        return bungeeSystem
-    }
+    val system: BungeeSystem
+        get() = bungeeSystem
 
-    fun getClassLoader() : ClassLoader {
-        return classLoader
-    }
+    val classLoader: ClassLoader
+        get() = classLoaderObject
+
+    val addonInfo: AddonInfo
+        get() = info
 
     fun loadFile(fileName: String) : File {
-        return File(info.getFile().absolutePath + "!" + fileName)
-    }
-
-    fun getAddonInfo() : AddonInfo {
-        return info
+        return File(info.file.absolutePath + "!" + fileName)
     }
 
 }

@@ -8,7 +8,7 @@ import java.net.URLClassLoader
 class AddonHandler(private val bungeeSystem: BungeeSystem) {
 
     private val addons: MutableSet<Addon> = LinkedHashSet()
-    private val dataFolder = bungeeSystem.getDataFolder()
+    private val dataFolder = bungeeSystem.dataFolder
     private val addonDirectory = loadAddonDirectory()
 
     private fun loadAddonDirectory() : File {
@@ -20,7 +20,7 @@ class AddonHandler(private val bungeeSystem: BungeeSystem) {
     fun loadAddons() {
 
         if(!addonDirectory.isDirectory) {
-            bungeeSystem.getLogger().sendError("Addondirectory should not be a file")
+            bungeeSystem.logger.sendError("Addondirectory should not be a file")
             return
         }
 
@@ -42,23 +42,23 @@ class AddonHandler(private val bungeeSystem: BungeeSystem) {
         var version = yamlFile.getString("version")
         val depends : MutableList<String> = yamlFile.getStringList("depends")
 
-        if(addons.stream().anyMatch { addon -> addon.getAddonInfo().getName().equals(name, ignoreCase = true) }) {
-            bungeeSystem.getLogger().sendError("Addon $name is already loaded")
+        if(addons.stream().anyMatch { addon -> addon.addonInfo.name.equals(name, ignoreCase = true) }) {
+            bungeeSystem.logger.sendError("Addon $name is already loaded")
             return
         }
 
         if(depends.contains(name)) {
-            bungeeSystem.getLogger().sendError("Addon $name depends on it self")
+            bungeeSystem.logger.sendError("Addon $name depends on it self")
             return
         }
 
         for(dependency in depends) {
 
-            if(addons.stream().anyMatch { addon -> addon.getAddonInfo().getName().equals(dependency, ignoreCase = true) })
+            if(addons.stream().anyMatch { addon -> addon.addonInfo.name.equals(dependency, ignoreCase = true) })
                 continue
 
             if(!loadDepend(dependency)) {
-                bungeeSystem.getLogger().sendError("Can't find depend $dependency")
+                bungeeSystem.logger.sendError("Can't find depend $dependency")
                 return
             }
         }
@@ -70,7 +70,7 @@ class AddonHandler(private val bungeeSystem: BungeeSystem) {
             author = "Unknown"
 
         if(main == null) {
-            bungeeSystem.getLogger().sendError("Addon $name has no Main Class")
+            bungeeSystem.logger.sendError("Addon $name has no Main Class")
             return
         }
 
@@ -79,18 +79,18 @@ class AddonHandler(private val bungeeSystem: BungeeSystem) {
         kotlin.runCatching {
             cls = loader.loadClass(main)
         }.onFailure {
-            bungeeSystem.getLogger().sendError("Can't load Main Class from addon $name")
+            bungeeSystem.logger.sendError("Can't load Main Class from addon $name")
             it.printStackTrace()
             return
         }
 
         if(cls?.superclass == null || cls?.superclass != Addon::class.java) {
-            bungeeSystem.getLogger().sendError("Main Class from addon $name is not extending the Addon class")
+            bungeeSystem.logger.sendError("Main Class from addon $name is not extending the Addon class")
             return
         }
 
         if(cls?.constructors?.size != 1) {
-            bungeeSystem.getLogger().sendError("Main Class from addon $name has not an Constructor with the Addoninfo")
+            bungeeSystem.logger.sendError("Main Class from addon $name has not an Constructor with the Addoninfo")
             return
         }
 
@@ -100,12 +100,12 @@ class AddonHandler(private val bungeeSystem: BungeeSystem) {
         kotlin.runCatching {
             classObject = cls?.constructors?.get(0)?.newInstance(addonInfo)
         }.onFailure {
-            bungeeSystem.getLogger().sendError("Failed loading Addon $name")
+            bungeeSystem.logger.sendError("Failed loading Addon $name")
             it.printStackTrace()
             return
         }
 
-        bungeeSystem.getLogger().sendMessage("Enabled addon $name $version")
+        bungeeSystem.logger.sendMessage("Enabled addon $name $version")
         val addon = classObject as Addon
 
         addon.onStart()
@@ -143,7 +143,7 @@ class AddonHandler(private val bungeeSystem: BungeeSystem) {
         val stream = loader.getResourceAsStream("addon.yml")
 
         if(stream == null) {
-            bungeeSystem.getLogger().sendError("Addon.yml was not found for file " + file.name)
+            bungeeSystem.logger.sendError("Addon.yml was not found for file " + file.name)
             return null
         }
 
@@ -152,7 +152,7 @@ class AddonHandler(private val bungeeSystem: BungeeSystem) {
         kotlin.runCatching {
             yamlConfig.load(stream)
         }.onFailure {
-            bungeeSystem.getLogger().sendError("Addon.yml can not be loaded for file " + file.name)
+            bungeeSystem.logger.sendError("Addon.yml can not be loaded for file " + file.name)
             it.printStackTrace()
             return null
         }

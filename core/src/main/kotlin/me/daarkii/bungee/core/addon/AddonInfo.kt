@@ -3,31 +3,26 @@ package me.daarkii.bungee.core.addon
 import java.io.File
 
 data class AddonInfo(
-    private val name: String,
-    private val version: String,
-    private val author: String,
-    private val main: String,
-    private val file: File
+    private val nameObj: String,
+    private val versionObj: String,
+    private val authorObj: String,
+    private val mainObj: String,
+    private val fileObj: File
 ) {
 
-    fun getFile() : File {
-        return this.file
-    }
+    val file: File
+        get() = fileObj
 
-    fun getMain() : String {
-        return this.main
-    }
+    val main: String
+        get() = mainObj
 
-    fun getAuthor() : String {
-        return this.author
-    }
+    val author: String
+        get() = authorObj
 
-    fun getVersion() : String {
-        return this.version
-    }
+    val version: String
+        get() = versionObj
 
-    fun getName() : String {
-        return this.name
-    }
+    val name: String
+        get() = nameObj
 
 }

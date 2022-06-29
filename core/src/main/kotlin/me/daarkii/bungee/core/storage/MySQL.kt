@@ -3,13 +3,12 @@ package me.daarkii.bungee.core.storage
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import me.daarkii.bungee.core.config.Config
-import me.daarkii.bungee.core.utils.ConfigB
 import javax.sql.DataSource
 
 class MySQL(private val settings: Config) {
 
     private val hikariConfig: HikariConfig = HikariConfig()
-    private var dataSource: HikariDataSource? = null
+    private var dataSourceObj: HikariDataSource? = null
 
     init {
         this.connect()
@@ -27,7 +26,7 @@ class MySQL(private val settings: Config) {
         hikariConfig.addDataSourceProperty("prepStmtCacheSize", "250")
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit", "2048")
         hikariConfig.maximumPoolSize = settings.getInteger("mysql.maxConnections")
-        dataSource = HikariDataSource(hikariConfig)
+        dataSourceObj = HikariDataSource(hikariConfig)
     }
 
     /**
@@ -40,8 +39,7 @@ class MySQL(private val settings: Config) {
     /**
      * @return the Datasource for connections
      */
-    fun getDataSource() : DataSource {
-        return this.dataSource!!
-    }
+    val dataSource: DataSource
+        get() = dataSourceObj!!
 
 }

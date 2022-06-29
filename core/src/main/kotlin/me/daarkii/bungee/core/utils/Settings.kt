@@ -13,21 +13,13 @@ class Settings {
     Cloud Provider
      */
 
-    fun activateCloudNet() {
-        this.cloudNet = true
-    }
+    var isCloudNetActive: Boolean
+        get() = cloudNet
+        set(value) { cloudNet = value}
 
-    fun activateSimpleCloud() {
-        this.simpleCloud = true
-    }
-
-    fun isCloudNetActive() : Boolean {
-        return cloudNet
-    }
-
-    fun isSimpleCloudActive() : Boolean {
-        return simpleCloud
-    }
+    var isSimpleCloudActive: Boolean
+        get() = simpleCloud
+        set(value) { simpleCloud = value }
 
     companion object {
         @JvmStatic

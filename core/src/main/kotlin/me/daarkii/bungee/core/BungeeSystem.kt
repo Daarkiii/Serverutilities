@@ -1,8 +1,10 @@
 package me.daarkii.bungee.core
 
 import me.daarkii.bungee.core.addon.AddonHandler
+import me.daarkii.bungee.core.command.PluginHandler
 import me.daarkii.bungee.core.config.Config
 import me.daarkii.bungee.core.config.impl.SettingFile
+import me.daarkii.bungee.core.config.impl.messages.MessageFile
 import me.daarkii.bungee.core.`object`.Console
 import me.daarkii.bungee.core.`object`.OfflineUser
 import me.daarkii.bungee.core.`object`.User
@@ -10,18 +12,19 @@ import me.daarkii.bungee.core.storage.MongoDB
 import me.daarkii.bungee.core.storage.MySQL
 import me.daarkii.bungee.core.utils.Logger
 import me.daarkii.bungee.core.utils.Platform
+import me.daarkii.bungee.core.utils.Settings
 import java.io.File
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
 abstract class BungeeSystem(
-    private val logger: Logger,
-    private val dataFolder: File,
-    private val platform: Platform
+    private val loggerObject: Logger,
+    private val dataFolderObject: File,
+    private val platformObject: Platform
     ) {
 
     //Storage
-    private lateinit var mySQL: MySQL
+    private lateinit var mysqlDB: MySQL
     private lateinit var mongoDB: MongoDB
 
     //Manages Addons and loads them
@@ -35,11 +38,14 @@ abstract class BungeeSystem(
         //load Files
         settingFile = SettingFile(dataFolder)
 
+        //Load Messages
+        MessageFile(this.dataFolder, this.settingFile.getString("language"))
+
         //Connect to database
         if(settingFile.getString("storage").equals("mysql", ignoreCase = true)) {
 
             //Connect to mysql
-            this.mySQL = MySQL(settingFile)
+            this.mysqlDB = MySQL(settingFile)
             this.logger.debug("Successfully connected to a mysql database")
 
         } else if(settingFile.getString("storage").equals("mongodb", ignoreCase = true)) {
@@ -59,6 +65,7 @@ abstract class BungeeSystem(
             this.logger.sendError("Shutting down...")
 
             this.shutdown()
+
             return
         }
 
@@ -67,29 +74,23 @@ abstract class BungeeSystem(
         this.addonHandler.loadAddons()
     }
 
-    fun isInDebugMode() : Boolean {
-        return settingFile.getBoolean("debug")
-    }
+    val debugMode: Boolean
+        get() = settingFile.getBoolean("debug")
 
-    fun getMySQL() : MySQL {
-        return mySQL
-    }
+    val mySQL: MySQL
+        get() = mysqlDB
 
-    fun getMongo() : MongoDB {
-        return mongoDB
-    }
+    val mongo: MongoDB
+        get() = mongoDB
 
-    fun getLogger() : Logger {
-        return logger
-    }
+    val logger: Logger
+        get() = loggerObject
 
-    fun getDataFolder() : File {
-        return dataFolder
-    }
+    val dataFolder: File
+        get() = dataFolderObject
 
-    fun getPlatform() : Platform {
-        return platform
-    }
+    val platform: Platform
+        get() = this.platformObject
 
     protected fun setInstance(bs: BungeeSystem) {
         instance = bs
@@ -104,15 +105,21 @@ abstract class BungeeSystem(
      * Gets a Console Object for a specified Platform
      * @return a CompletableFuture<Console> with the Console object
      */
-    abstract fun getConsole() : CompletableFuture<Console>
+    abstract val console: CompletableFuture<Console>
 
     /**
-     * Gets a Console Object for a specified Platform
-     * @return a CompletableFuture<Console> with the Console object
+     * Gets a User Object for a specified Platform
+     * @return a CompletableFuture<User> with the User object
      */
     abstract fun getUser(uuid: UUID) : CompletableFuture<User?>
 
+    /**
+     * Gets a OfflineUser Object for a specified Platform
+     * @return a CompletableFuture<OfflineUser> with the OfflineUser object
+     */
     abstract fun getOfflineUser(uuid: UUID) : CompletableFuture<OfflineUser?>
+
+    abstract val pluginHandler: PluginHandler
 
     companion object {
         private var instance: BungeeSystem? = null

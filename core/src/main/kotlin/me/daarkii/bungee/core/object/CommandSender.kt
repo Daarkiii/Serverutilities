@@ -8,13 +8,13 @@ interface CommandSender {
      * Gets the name of the command sender
      * @return the name
      */
-    fun getName() : String
+    val name: String
 
     /**
      * Gets the colored name of the command sender
      * @return the colored name
      */
-    fun getDisplayName() : String
+    val displayName: String
 
     /**
      * Checks if the command sender has the given permission
