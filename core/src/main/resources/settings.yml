@@ -23,5 +23,6 @@ mongo:
   user: 'admin'
   password: ''
 
-  # Select your language here. Look into the messages' folder for available languages and names
-  language: "en_EN"
+# Select your language here. Look into the messages' folder for available languages and names
+language: "en_EN"
+test1: false

@@ -2,9 +2,10 @@ package me.daarkii.bungee.core
 
 import me.daarkii.bungee.core.addon.AddonHandler
 import me.daarkii.bungee.core.command.PluginHandler
+import me.daarkii.bungee.core.command.impl.TestCMD
 import me.daarkii.bungee.core.config.Config
 import me.daarkii.bungee.core.config.impl.SettingFile
-import me.daarkii.bungee.core.config.impl.messages.MessageFile
+import me.daarkii.bungee.core.config.impl.messages.Message
 import me.daarkii.bungee.core.`object`.Console
 import me.daarkii.bungee.core.`object`.OfflineUser
 import me.daarkii.bungee.core.`object`.User
@@ -12,15 +13,14 @@ import me.daarkii.bungee.core.storage.MongoDB
 import me.daarkii.bungee.core.storage.MySQL
 import me.daarkii.bungee.core.utils.Logger
 import me.daarkii.bungee.core.utils.Platform
-import me.daarkii.bungee.core.utils.Settings
 import java.io.File
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
 abstract class BungeeSystem(
-    private val loggerObject: Logger,
-    private val dataFolderObject: File,
-    private val platformObject: Platform
+    private val loggerImpl: Logger,
+    private val dataFolderImpl: File,
+    private val platformImpl: Platform
     ) {
 
     //Storage
@@ -39,7 +39,7 @@ abstract class BungeeSystem(
         settingFile = SettingFile(dataFolder)
 
         //Load Messages
-        MessageFile(this.dataFolder, this.settingFile.getString("language"))
+        Message(this.settingFile.getString("language"), this.dataFolder)
 
         //Connect to database
         if(settingFile.getString("storage").equals("mysql", ignoreCase = true)) {
@@ -72,6 +72,9 @@ abstract class BungeeSystem(
         //enable Addons
         this.addonHandler = AddonHandler(this)
         this.addonHandler.loadAddons()
+
+        //enable Commands
+        this.pluginHandler.registerCommand(TestCMD())
     }
 
     val debugMode: Boolean
@@ -84,13 +87,13 @@ abstract class BungeeSystem(
         get() = mongoDB
 
     val logger: Logger
-        get() = loggerObject
+        get() = loggerImpl
 
     val dataFolder: File
-        get() = dataFolderObject
+        get() = dataFolderImpl
 
     val platform: Platform
-        get() = this.platformObject
+        get() = this.platformImpl
 
     protected fun setInstance(bs: BungeeSystem) {
         instance = bs

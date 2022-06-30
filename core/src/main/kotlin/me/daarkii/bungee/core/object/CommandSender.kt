@@ -1,5 +1,6 @@
 package me.daarkii.bungee.core.`object`
 
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 
 interface CommandSender {
@@ -34,6 +35,12 @@ interface CommandSender {
      * @param component the component to send
      */
     fun sendMessage(component: TextComponent)
+
+    /**
+     * Sends the given component  to the command sender
+     * @param component the component to send
+     */
+    fun sendMessage(component: Component)
 
     /**
      * Sends the given MiniMessage String  to the command sender

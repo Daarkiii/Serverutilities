@@ -1,4 +1,4 @@
-package me.daarkii.bungee.bungee.impl
+package me.daarkii.bungee.bungee.impl.command
 
 import me.daarkii.bungee.core.BungeeSystem
 import net.md_5.bungee.api.CommandSender

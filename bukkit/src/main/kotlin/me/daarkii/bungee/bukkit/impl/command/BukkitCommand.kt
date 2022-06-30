@@ -2,7 +2,7 @@ package me.daarkii.bungee.bukkit.impl.command
 
 import me.daarkii.bungee.core.BungeeSystem
 import me.daarkii.bungee.core.command.Command
-import me.daarkii.bungee.core.config.impl.messages.Messages
+import me.daarkii.bungee.core.config.impl.messages.Message
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.command.defaults.BukkitCommand
@@ -29,7 +29,7 @@ class BukkitCommand(private val command: Command) : BukkitCommand(command.name, 
                     if(user.hasPermission(this.command.permission))
                         this.command.execute(user, args)
                     else
-                        user.sendMessage(Messages.instance.noPerms)
+                        user.sendMessage(Message.instance.noPerms)
                 }
             }
             return false

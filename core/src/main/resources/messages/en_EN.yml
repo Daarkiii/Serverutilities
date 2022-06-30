@@ -1,6 +1,16 @@
 # English Config File
+#
+# This Plugin uses the MiniMessage Framework to create and send messages
+# You can create your own MiniMessages here: https://webui.adventure.kyori.net/
+# With this you can create Messages in every rgb color, add a hover text, make the message clickable and some internal stuff more
 
 messages:
-  prefix: '&a&lBungee &8| &7'
+  prefix: '<color:green><b>Bungee</b></color> <color:dark_gray>|</color> '
   user:
-    noperms: "[Prefix]&7You have &cno &7rights to do that"
+    noperms: "<prefix><color:gray>You have <color:red>no</color> rights to do that</color>"
+  tablist:
+    # possible placeholders: <players> = OnlinePlayers, <maxPlayers> = Maximum online players
+    # <server> = Current server of the user
+    header: '<c:green><b>BungeeSystem</b></c> <c:dark_gray>|</c> <c:gray>Test Network</c>
+                <c:gray> Players: <c:aqua><players><c:dark_gray>/</c><maxPlayers></c></c>'
+    footer: '<c:gray>Current Server:</c> <c:green><server></c>'

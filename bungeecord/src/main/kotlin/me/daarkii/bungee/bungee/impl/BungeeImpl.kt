@@ -1,7 +1,9 @@
 package me.daarkii.bungee.bungee.impl
 
 import me.daarkii.bungee.bungee.BungeeHook
+import me.daarkii.bungee.bungee.impl.command.BungeePluginHandler
 import me.daarkii.bungee.bungee.impl.`object`.BungeeConsole
+import me.daarkii.bungee.bungee.impl.`object`.user.BungeeUser
 import me.daarkii.bungee.core.BungeeSystem
 import me.daarkii.bungee.core.command.PluginHandler
 import me.daarkii.bungee.core.`object`.Console
@@ -24,6 +26,7 @@ class BungeeImpl(private val bungee: BungeeHook) : BungeeSystem(
 ) {
 
     private val bungeeAudiences = BungeeAudiences.create(bungee)
+    private val pluginHandlerImpl = BungeePluginHandler(bungee)
 
     init {
         setInstance(this)
@@ -47,7 +50,7 @@ class BungeeImpl(private val bungee: BungeeHook) : BungeeSystem(
         get() = CompletableFuture.supplyAsync { BungeeConsole(bungeeAudiences, this.bungee.proxy.console) }
 
     override fun getUser(uuid: UUID): CompletableFuture<User?> {
-        return CompletableFuture()
+        return CompletableFuture.supplyAsync{ BungeeUser(uuid, this) }
     }
 
     override fun getOfflineUser(uuid: UUID): CompletableFuture<OfflineUser?> {
@@ -59,7 +62,7 @@ class BungeeImpl(private val bungee: BungeeHook) : BungeeSystem(
     }
 
     override val pluginHandler: PluginHandler
-        get() = TODO()
+        get() = pluginHandlerImpl
 
     companion object {
         @JvmStatic

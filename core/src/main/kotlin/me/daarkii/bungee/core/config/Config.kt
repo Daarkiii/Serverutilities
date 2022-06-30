@@ -96,13 +96,13 @@ abstract class Config(private val fileObj: File, private val location: String) {
      */
     private fun load() {
 
-        if(!file.exists()) {
+        if(!fileObj.exists()) {
 
             //file does not exist
-            file.parentFile.mkdirs()
+            fileObj.parentFile.mkdirs()
 
             //Debug
-            println("Creating file $file")
+            println("Creating file ${fileObj.name}")
 
             kotlin.runCatching {
                 loader.getResourceAsStream(location).use { stream ->
@@ -110,7 +110,7 @@ abstract class Config(private val fileObj: File, private val location: String) {
                     if(stream == null)
                         throw IOException("Can't create file $name")
 
-                    Files.copy(stream, file.toPath())
+                    Files.copy(stream, fileObj.toPath())
                 }
             }.onFailure { e ->
                 e.printStackTrace()
@@ -118,7 +118,7 @@ abstract class Config(private val fileObj: File, private val location: String) {
             }
         }
 
-        configurationObj = YamlFile(file)
+        configurationObj = YamlFile(fileObj)
 
         kotlin.runCatching {
             configuration.loadWithComments()
@@ -127,6 +127,24 @@ abstract class Config(private val fileObj: File, private val location: String) {
             return
         }
 
+        /**
+         * Update values
+         */
+
+        val newYamlFile = YamlFile()
+        newYamlFile.load(javaClass.classLoader.getResourceAsStream(location))
+
+        for(key in configuration.getKeys(true)) {
+            if(!newYamlFile.contains(key))
+                configuration.set(key, null)
+        }
+
+        for(key in newYamlFile.getKeys(true)) {
+            if(!configuration.contains(key))
+                configuration.set(key, newYamlFile.get(key))
+        }
+
+        save()
         this.afterLoad()
     }
 

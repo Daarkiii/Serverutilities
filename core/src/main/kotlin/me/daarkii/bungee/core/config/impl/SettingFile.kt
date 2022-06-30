@@ -1,6 +1,7 @@
 package me.daarkii.bungee.core.config.impl
 
 import me.daarkii.bungee.core.config.Config
+import me.daarkii.bungee.core.config.impl.messages.Message
 import java.io.File
 
 class SettingFile(dataFolder: File) : Config(File(dataFolder, "settings.yml"), "settings.yml") {
