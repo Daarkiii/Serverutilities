@@ -63,20 +63,56 @@ abstract class PluginHandler {
             }
         }
 
-        for(priority in prioritySorted.keys) {
-            for(method in prioritySorted[priority]!!.keys) {
+        //high priority
+        if(prioritySorted.containsKey(EventPriority.HIGH)) {
+            for(method in prioritySorted[EventPriority.HIGH]!!.keys) {
 
                 if(event !is Cancellable && event.isAsync) {
                     CompletableFuture.runAsync {
-                        method.invoke(prioritySorted[priority]!![method]!!, event)
+                        method.invoke(prioritySorted[EventPriority.HIGH]!![method]!!, event)
                         return@runAsync
                     }
                     continue
                 }
 
                 //run the event on the main thread
-                method.invoke(prioritySorted[priority]!![method]!!, event)
+                method.invoke(prioritySorted[EventPriority.HIGH]!![method]!!, event)
             }
         }
+
+        //normal priority
+        if(prioritySorted.containsKey(EventPriority.NORMAL)) {
+            for(method in prioritySorted[EventPriority.NORMAL]!!.keys) {
+
+                if(event !is Cancellable && event.isAsync) {
+                    CompletableFuture.runAsync {
+                        method.invoke(prioritySorted[EventPriority.NORMAL]!![method]!!, event)
+                        return@runAsync
+                    }
+                    continue
+                }
+
+                //run the event on the main thread
+                method.invoke(prioritySorted[EventPriority.NORMAL]!![method]!!, event)
+            }
+        }
+
+        //low priority
+        if(prioritySorted.containsKey(EventPriority.LOW)) {
+            for(method in prioritySorted[EventPriority.LOW]!!.keys) {
+
+                if(event !is Cancellable && event.isAsync) {
+                    CompletableFuture.runAsync {
+                        method.invoke(prioritySorted[EventPriority.LOW]!![method]!!, event)
+                        return@runAsync
+                    }
+                    continue
+                }
+
+                //run the event on the main thread
+                method.invoke(prioritySorted[EventPriority.LOW]!![method]!!, event)
+            }
+        }
+
     }
 }
