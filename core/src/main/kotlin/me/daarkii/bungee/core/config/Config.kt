@@ -5,11 +5,23 @@ import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 
-abstract class Config(private val fileObj: File, private val location: String) {
+abstract class Config(val file: File, private val location: String) {
 
     private val loader: ClassLoader = this.javaClass.classLoader
-    private val nameObj: String = this.file.name
-    private lateinit var configurationObj: YamlFile
+
+    /**
+     * Gets the Name of the Config
+     *
+     * @return the Name of the Config file
+     */
+    val name: String = this.file.name
+
+    /**
+     * Gets the YamlFile of the Config
+     *
+     * @return the YamlFile of the Config
+     */
+    private lateinit var configuration: YamlFile
 
     init {
         this.load()
@@ -19,30 +31,6 @@ abstract class Config(private val fileObj: File, private val location: String) {
      * Gets called after the file is loaded
      */
     abstract fun afterLoad()
-
-    /**
-     * Gets the file from this Config
-     *
-     * @return this file for this config
-     */
-    val file: File
-        get() = fileObj
-
-    /**
-     * Gets the Name of the Config
-     *
-     * @return the Name of the Config file
-     */
-    val name: String
-        get() = nameObj
-
-    /**
-     * Gets the YamlFile of the Config
-     *
-     * @return the YamlFile of the Config
-     */
-    val configuration: YamlFile
-        get() = configurationObj
 
     /**
      * Gets a String from the Config with replaced Color codes
@@ -96,13 +84,13 @@ abstract class Config(private val fileObj: File, private val location: String) {
      */
     private fun load() {
 
-        if(!fileObj.exists()) {
+        if(!file.exists()) {
 
             //file does not exist
-            fileObj.parentFile.mkdirs()
+            file.parentFile.mkdirs()
 
             //Debug
-            println("Creating file ${fileObj.name}")
+            println("Creating file ${file.name}")
 
             kotlin.runCatching {
                 loader.getResourceAsStream(location).use { stream ->
@@ -110,7 +98,7 @@ abstract class Config(private val fileObj: File, private val location: String) {
                     if(stream == null)
                         throw IOException("Can't create file $name")
 
-                    Files.copy(stream, fileObj.toPath())
+                    Files.copy(stream, file.toPath())
                 }
             }.onFailure { e ->
                 e.printStackTrace()
@@ -118,7 +106,7 @@ abstract class Config(private val fileObj: File, private val location: String) {
             }
         }
 
-        configurationObj = YamlFile(fileObj)
+        configuration = YamlFile(file)
 
         kotlin.runCatching {
             configuration.loadWithComments()

@@ -1,25 +1,26 @@
 package me.daarkii.bungee.core.utils
 
-class Settings {
+class Settings() {
 
     init {
         instance = this
     }
 
-    private var cloudNet = false
-    private var simpleCloud = false
-
     /*
     Cloud Provider
      */
 
-    var isCloudNetActive: Boolean
-        get() = cloudNet
-        set(value) { cloudNet = value}
+    var isCloudNetActive = false
 
-    var isSimpleCloudActive: Boolean
-        get() = simpleCloud
-        set(value) { simpleCloud = value }
+    var isSimpleCloudActive = false
+
+    /*
+    Storage Provider
+     */
+
+    var useMongo = false
+
+    var useMySQL = false
 
     companion object {
         @JvmStatic

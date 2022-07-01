@@ -12,11 +12,9 @@ class BungeeConsole(
     private val console: CommandSender
 ) : Console {
 
-    override val name: String
-        get() = "Console"
+    override val name = "Console"
 
-    override val displayName: String
-        get() = "§c§l" + this.name
+    override val displayName = "§c§l" + this.name
 
     override fun hasPermission(permission: String): Boolean {
         return this.console.hasPermission(permission)

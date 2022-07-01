@@ -8,13 +8,11 @@ import net.kyori.adventure.text.minimessage.MiniMessage
 import net.md_5.bungee.api.ProxyServer
 import java.util.*
 
-class BungeeUser(private val uuidImpl: UUID, private val proxy: BungeeImpl) : User {
+class BungeeUser(override val uuid: UUID, private val proxy: BungeeImpl) : User {
 
-    override val name: String
-        get() =  this.proxiedPlayer.name
+    override val name = this.proxiedPlayer.name
 
-    override val displayName: String
-        get() =  this.proxiedPlayer.displayName
+    override val displayName = this.proxiedPlayer.displayName
 
     /**
      * Checks if the command sender has the given permission
@@ -38,7 +36,7 @@ class BungeeUser(private val uuidImpl: UUID, private val proxy: BungeeImpl) : Us
      * @param component the component to send
      */
     override fun sendMessage(component: TextComponent) {
-        proxy.getAdventure().player(this.proxiedPlayer).sendMessage(component)
+        proxy.adventure.player(this.proxiedPlayer).sendMessage(component)
     }
 
     /**
@@ -46,7 +44,7 @@ class BungeeUser(private val uuidImpl: UUID, private val proxy: BungeeImpl) : Us
      * @param component the component to send
      */
     override fun sendMessage(component: Component) {
-        proxy.getAdventure().player(this.proxiedPlayer).sendMessage(component)
+        proxy.adventure.player(this.proxiedPlayer).sendMessage(component)
     }
 
     /**
@@ -54,11 +52,8 @@ class BungeeUser(private val uuidImpl: UUID, private val proxy: BungeeImpl) : Us
      * @param miniMsg the not deserialized MiniMessage String
      */
     override fun sendMiniMessage(miniMsg: String) {
-        proxy.getAdventure().player(this.proxiedPlayer).sendMessage(MiniMessage.miniMessage().deserialize(miniMsg))
+        proxy.adventure.player(this.proxiedPlayer).sendMessage(MiniMessage.miniMessage().deserialize(miniMsg))
     }
-
-    override val uuid: UUID
-        get() =  uuidImpl
 
     override val isOnline: Boolean
         get() =  true
@@ -71,17 +66,14 @@ class BungeeUser(private val uuidImpl: UUID, private val proxy: BungeeImpl) : Us
     }
 
     override fun sendTabList(header: Component, footer: Component) {
-        proxy.getAdventure().player(this.proxiedPlayer).sendPlayerListHeaderAndFooter(header, footer)
+        proxy.adventure.player(this.proxiedPlayer).sendPlayerListHeaderAndFooter(header, footer)
     }
 
-    override val address: String
-        get() =  ""
+    override val address = ""
 
-    override val serverName: String
-        get() =  this.proxiedPlayer.server.info.name
+    override val serverName = this.proxiedPlayer.server.info.name
 
-    override val ping: Int
-        get() = this.proxiedPlayer.ping
+    override val ping = this.proxiedPlayer.ping
 
     private val proxiedPlayer
         get() = ProxyServer.getInstance().getPlayer(uuid)

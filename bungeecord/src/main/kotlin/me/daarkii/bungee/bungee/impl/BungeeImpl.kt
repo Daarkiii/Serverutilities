@@ -25,8 +25,8 @@ class BungeeImpl(private val bungee: BungeeHook) : BungeeSystem(
     Platform.BUNGEE,
 ) {
 
-    private val bungeeAudiences = BungeeAudiences.create(bungee)
-    private val pluginHandlerImpl = BungeePluginHandler(bungee)
+    override val pluginHandler = BungeePluginHandler(bungee)
+    val adventure = BungeeAudiences.create(bungee)
 
     init {
         setInstance(this)
@@ -47,7 +47,7 @@ class BungeeImpl(private val bungee: BungeeHook) : BungeeSystem(
     }
 
     override val console: CompletableFuture<Console>
-        get() = CompletableFuture.supplyAsync { BungeeConsole(bungeeAudiences, this.bungee.proxy.console) }
+        get() = CompletableFuture.supplyAsync { BungeeConsole(adventure, this.bungee.proxy.console) }
 
     override fun getUser(uuid: UUID): CompletableFuture<User?> {
         return CompletableFuture.supplyAsync{ BungeeUser(uuid, this) }
@@ -56,13 +56,6 @@ class BungeeImpl(private val bungee: BungeeHook) : BungeeSystem(
     override fun getOfflineUser(uuid: UUID): CompletableFuture<OfflineUser?> {
         return CompletableFuture()
     }
-
-    fun getAdventure() : BungeeAudiences {
-        return bungeeAudiences
-    }
-
-    override val pluginHandler: PluginHandler
-        get() = pluginHandlerImpl
 
     companion object {
         @JvmStatic

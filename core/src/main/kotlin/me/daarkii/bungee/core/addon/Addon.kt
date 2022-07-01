@@ -16,36 +16,42 @@ import java.io.File
  */
 
 abstract class Addon(
-    private val info: AddonInfo
+    val addonInfo: AddonInfo
 ) {
 
-    private val bungeeSystem = BungeeSystem.getInstance()
-    private val classLoaderObject = this.javaClass.classLoader
-    private val dataFolderObject = File(bungeeSystem.dataFolder.absolutePath + "/addons/" + name)
+    /**
+     * Main class of the BungeeUtilities plugin
+     */
+    val system = BungeeSystem.getInstance()
+
+    /**
+     * The classloader for the addon
+     */
+    val classLoader = this.javaClass.classLoader
+
+    /**
+     * The name of this addon
+     */
+    val name = addonInfo.name
+
+    /**
+     * The data-folder of this addon
+     */
+    val dataFolder = File(system.dataFolder.absolutePath + "/addons/" + name)
 
     open fun onStart() {
+        //Startup logic here
     }
 
     open fun onEnd() {
+        //Disable logic here
     }
 
-    val dataFolder: File
-        get() = dataFolderObject
-
-    val name: String
-        get() = info.name
-
-    val system: BungeeSystem
-        get() = bungeeSystem
-
-    val classLoader: ClassLoader
-        get() = classLoaderObject
-
-    val addonInfo: AddonInfo
-        get() = info
-
+    /**
+     * Loads a file from the data-folder of the addon
+     */
     fun loadFile(fileName: String) : File {
-        return File(info.file.absolutePath + "!" + fileName)
+        return File(addonInfo.file.absolutePath + "!" + fileName)
     }
 
 }

@@ -6,11 +6,9 @@ import java.util.*
 
 class BungeeServer(private val plugin: Plugin) : Server {
 
-    override val proxyPlayers: Int
-        get() = plugin.proxy.onlineCount
+    override val proxyPlayers = plugin.proxy.onlineCount
 
-    override val proxySlots: Int
-        get() = plugin.proxy.config.playerLimit
+    override val proxySlots = plugin.proxy.config.playerLimit
 
     override fun getName(uuid: UUID) : String {
         return plugin.proxy.getPlayer(uuid).server.info.name

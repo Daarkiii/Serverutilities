@@ -19,8 +19,9 @@ class BukkitImpl(private val bukkit: JavaPlugin) : BungeeSystem(
     Platform.BUKKIT
 ) {
 
-    private val bukkitAudiences = BukkitAudiences.create(bukkit)
-    private val pluginHandlerObject = BukkitPluginHandler(bukkit)
+    override val pluginHandler = BukkitPluginHandler(bukkit)
+
+    val adventure = BukkitAudiences.create(bukkit)
 
     init {
         setInstance(this)
@@ -54,14 +55,7 @@ class BukkitImpl(private val bukkit: JavaPlugin) : BungeeSystem(
         TODO("Not yet implemented")
     }
 
-    fun getAdventure() : BukkitAudiences {
-        return bukkitAudiences
-    }
-
-    override val pluginHandler: PluginHandler
-        get() = pluginHandlerObject
-
-            companion object {
+    companion object {
         @JvmStatic
         lateinit var instance: BukkitImpl
             private set
