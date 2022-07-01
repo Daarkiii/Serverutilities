@@ -1,11 +1,12 @@
-package me.daarkii.bungee.bukkit.impl.command
+package me.daarkii.bungee.bukkit.impl
 
+import me.daarkii.bungee.bukkit.impl.command.BukkitCommand
 import me.daarkii.bungee.core.command.Command
-import me.daarkii.bungee.core.command.PluginHandler
+import me.daarkii.bungee.core.handler.PluginHandler
 import org.bukkit.command.CommandMap
 import org.bukkit.plugin.java.JavaPlugin
 
-class BukkitPluginHandler(private val bukkit: JavaPlugin) : PluginHandler {
+class BukkitPluginHandler(private val bukkit: JavaPlugin) : PluginHandler() {
 
     override fun registerCommand(command: Command) {
 

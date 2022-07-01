@@ -1,7 +1,7 @@
 package me.daarkii.bungee.core
 
 import me.daarkii.bungee.core.addon.AddonHandler
-import me.daarkii.bungee.core.command.PluginHandler
+import me.daarkii.bungee.core.handler.PluginHandler
 import me.daarkii.bungee.core.command.impl.TestCMD
 import me.daarkii.bungee.core.config.Config
 import me.daarkii.bungee.core.config.impl.SettingFile

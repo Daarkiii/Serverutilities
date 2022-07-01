@@ -1,8 +1,6 @@
 package me.daarkii.bungee.bukkit.impl
 
-import me.daarkii.bungee.bukkit.impl.command.BukkitPluginHandler
 import me.daarkii.bungee.core.BungeeSystem
-import me.daarkii.bungee.core.command.PluginHandler
 import me.daarkii.bungee.core.`object`.Console
 import me.daarkii.bungee.core.`object`.OfflineUser
 import me.daarkii.bungee.core.`object`.User
