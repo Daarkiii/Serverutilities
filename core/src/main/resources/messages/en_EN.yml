@@ -12,5 +12,10 @@ messages:
     # possible placeholders: <players> = OnlinePlayers, <maxPlayers> = Maximum online players
     # <server> = Current server of the user
     header: '<c:green><b>BungeeSystem</b></c> <c:dark_gray>|</c> <c:gray>Test Network</c>
-                <c:gray> Players: <c:aqua><players><c:dark_gray>/</c><maxPlayers></c></c>'
+                <c:gray> Players: </c><c:aqua><players><c:dark_gray>/</c><maxPlayers></c>'
     footer: '<c:gray>Current Server:</c> <c:green><server></c>'
+  commands:
+      addons:
+        message: '<prefix><c:gray>Addons(<size>):</c> <addons>'
+        commaColor: '<c:white>'
+        addonColor: '<c:green>'

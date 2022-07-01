@@ -1,11 +1,11 @@
 package me.daarkii.bungee.core.handler
 
 import me.daarkii.bungee.core.command.Command
-import me.daarkii.bungee.core.event.Cancellable
-import me.daarkii.bungee.core.event.Event
-import me.daarkii.bungee.core.event.EventHandler
-import java.util.EventListener
+import me.daarkii.bungee.core.event.*
+import java.lang.reflect.Method
+import java.util.LinkedList
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ConcurrentHashMap
 
 abstract class PluginHandler {
 
@@ -31,6 +31,8 @@ abstract class PluginHandler {
      */
     fun callEvent(event: Event) {
 
+        val prioritySorted: MutableMap<EventPriority, MutableMap<Method, EventListener>> = ConcurrentHashMap()
+
         for(eventListener in events) {
 
             for(method in eventListener.javaClass.methods) {
@@ -49,19 +51,31 @@ abstract class PluginHandler {
                 if(parameter.type.name != event.javaClass.name)
                     continue
 
+                val priority = method.getAnnotation(EventHandler::class.java).priority
+
+                val current: MutableMap<Method, EventListener> = if(prioritySorted.containsKey(priority))
+                    prioritySorted[priority]!!
+                else
+                    HashMap()
+
+                current[method] = eventListener
+                prioritySorted[priority] = current
+            }
+        }
+
+        for(priority in prioritySorted.keys) {
+            for(method in prioritySorted[priority]!!.keys) {
+
                 if(event !is Cancellable && event.isAsync) {
                     CompletableFuture.runAsync {
-                        method.invoke(eventListener, event)
+                        method.invoke(prioritySorted[priority]!![method]!!, event)
                         return@runAsync
                     }
                     continue
                 }
 
                 //run the event on the main thread
-                kotlin.runCatching {
-                    method.invoke(eventListener, event)
-                }
-
+                method.invoke(prioritySorted[priority]!![method]!!, event)
             }
         }
     }

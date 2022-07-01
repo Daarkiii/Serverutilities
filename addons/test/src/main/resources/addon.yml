@@ -1,0 +1,4 @@
+name: TestAddon
+version: 1.0
+author: Daarkii
+main: me.daarkii.addon.TestAddon

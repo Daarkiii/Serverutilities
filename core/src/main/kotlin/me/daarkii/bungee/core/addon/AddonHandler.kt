@@ -7,7 +7,8 @@ import java.net.URLClassLoader
 
 class AddonHandler(private val bungeeSystem: BungeeSystem) {
 
-    private val addons: MutableSet<Addon> = LinkedHashSet()
+    val addons: MutableSet<Addon> = HashSet()
+
     private val dataFolder = bungeeSystem.dataFolder
     private val addonDirectory = loadAddonDirectory()
 
@@ -20,7 +21,7 @@ class AddonHandler(private val bungeeSystem: BungeeSystem) {
     fun loadAddons() {
 
         if(!addonDirectory.isDirectory) {
-            bungeeSystem.logger.sendError("Addondirectory should not be a file")
+            bungeeSystem.logger.sendError("Addon-directory should not be a file")
             return
         }
 

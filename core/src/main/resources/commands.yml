@@ -1,0 +1,9 @@
+# Here you can set the name, aliases and permission for each command
+
+# With this permission the user can execute every command from this plugin
+opPermission: 'bungee.*'
+
+addons:
+  name: 'addons'
+  permission: 'bungee.*'
+  aliases:

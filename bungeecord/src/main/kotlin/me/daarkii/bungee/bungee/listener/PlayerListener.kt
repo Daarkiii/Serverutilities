@@ -15,16 +15,16 @@ class PlayerListener(private val plugin: Plugin): Listener {
     fun handleLogin(event: ServerSwitchEvent) {
 
         val player = event.player
-        val audience = BungeeImpl.instance.getAdventure().player(player)
+        val audience = BungeeImpl.instance.adventure.player(player)
 
         val header = Message.Wrapper.wrap(Message.instance.config.getString("messages.tablist.header"),
             PlaceHolder("players", Component.text(player.server.info.players.size)),
-            PlaceHolder("maxPlayers", Component.text(plugin.proxy.onlineCount)),
+            PlaceHolder("maxplayers", Component.text(plugin.proxy.onlineCount)),
             PlaceHolder("server", Component.text(player.server.info.name)))
 
         val footer = Message.Wrapper.wrap(Message.instance.config.getString("messages.tablist.footer"),
             PlaceHolder("players", Component.text(player.server.info.players.size)),
-            PlaceHolder("maxPlayers", Component.text(plugin.proxy.onlineCount)),
+            PlaceHolder("maxplayers", Component.text(plugin.proxy.onlineCount)),
             PlaceHolder("server", Component.text(player.server.info.name)))
 
         audience.sendPlayerListHeaderAndFooter(header, footer)

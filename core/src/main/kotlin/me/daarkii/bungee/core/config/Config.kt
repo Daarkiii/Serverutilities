@@ -4,6 +4,7 @@ import org.simpleyaml.configuration.file.YamlFile
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
+import java.util.Collections
 
 abstract class Config(val file: File, private val location: String) {
 
@@ -21,7 +22,7 @@ abstract class Config(val file: File, private val location: String) {
      *
      * @return the YamlFile of the Config
      */
-    private lateinit var configuration: YamlFile
+    lateinit var configuration: YamlFile
 
     init {
         this.load()
@@ -40,6 +41,19 @@ abstract class Config(val file: File, private val location: String) {
      */
     fun getString(path: String) : String {
         return this.configuration.getString(path)
+    }
+
+    /**
+     * Gets a List<String> from the Config
+     *
+     * @param path the Key for the string
+     * @return the loaded List
+     */
+    fun getStringList(path: String) : MutableList<String> {
+        return if(this.configuration.contains(path))
+            this.configuration.getStringList(path)
+        else
+            Collections.emptyList()
     }
 
     /**

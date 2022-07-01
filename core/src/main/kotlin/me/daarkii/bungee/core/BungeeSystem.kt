@@ -1,9 +1,11 @@
 package me.daarkii.bungee.core
 
 import me.daarkii.bungee.core.addon.AddonHandler
+import me.daarkii.bungee.core.command.impl.AddonCMD
 import me.daarkii.bungee.core.handler.PluginHandler
 import me.daarkii.bungee.core.command.impl.TestCMD
 import me.daarkii.bungee.core.config.Config
+import me.daarkii.bungee.core.config.impl.CommandFile
 import me.daarkii.bungee.core.config.impl.SettingFile
 import me.daarkii.bungee.core.config.impl.messages.Message
 import me.daarkii.bungee.core.`object`.Console
@@ -25,10 +27,11 @@ abstract class BungeeSystem(
     ) {
 
     //Manages Addons and loads them
-    private lateinit var addonHandler: AddonHandler
+    lateinit var addonHandler: AddonHandler
 
     //Files
-    private lateinit var settingFile: Config
+    lateinit var settingFile: Config
+    lateinit var commandFile: Config
 
     protected fun init() {
 
@@ -37,6 +40,7 @@ abstract class BungeeSystem(
 
         //load Files
         settingFile = SettingFile(dataFolder)
+        commandFile = CommandFile(dataFolder)
 
         //Load Messages
         Message(this.settingFile.getString("language"), this.dataFolder)
@@ -80,7 +84,12 @@ abstract class BungeeSystem(
         this.addonHandler.loadAddons()
 
         //enable Commands
+        this.loadCommands()
+    }
+
+    private fun loadCommands() {
         this.pluginHandler.registerCommand(TestCMD())
+        this.pluginHandler.registerCommand(AddonCMD(this))
     }
 
     val debugMode: Boolean

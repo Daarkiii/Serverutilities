@@ -7,4 +7,4 @@ package me.daarkii.bungee.core.event
  */
 @Retention(AnnotationRetention.RUNTIME)
 @Target
-annotation class EventHandler
+annotation class EventHandler(val priority: EventPriority = EventPriority.NORMAL)
