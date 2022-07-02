@@ -8,11 +8,18 @@ import net.kyori.adventure.text.minimessage.MiniMessage
 import net.md_5.bungee.api.ProxyServer
 import java.util.*
 
-class BungeeUser(override val uuid: UUID, private val proxy: BungeeImpl) : User {
+class BungeeUser(
+    override val id: Long,
+    override val uuid: UUID,
+    private val proxy: BungeeImpl,
+    override val firstJoin: Long,
+    override val lastJoin: Long,
+    override var onlineTime: Long
+) : User {
 
-    override val name = this.proxiedPlayer.name
+    override val name: String = this.proxiedPlayer.name
 
-    override val displayName = this.proxiedPlayer.displayName
+    override val displayName: String = this.proxiedPlayer.displayName
 
     /**
      * Checks if the command sender has the given permission
@@ -58,6 +65,10 @@ class BungeeUser(override val uuid: UUID, private val proxy: BungeeImpl) : User 
     override val isOnline: Boolean
         get() =  true
 
+    override fun addOnlineTime() {
+        this.onlineTime = this.onlineTime + 1
+    }
+
     override fun connect(server: String) {
     }
 
@@ -71,7 +82,7 @@ class BungeeUser(override val uuid: UUID, private val proxy: BungeeImpl) : User 
 
     override val address = ""
 
-    override val serverName = this.proxiedPlayer.server.info.name
+    override val serverName: String = this.proxiedPlayer.server.info.name
 
     override val ping = this.proxiedPlayer.ping
 

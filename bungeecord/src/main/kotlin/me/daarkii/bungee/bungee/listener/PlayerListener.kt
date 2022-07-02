@@ -1,33 +1,28 @@
 package me.daarkii.bungee.bungee.listener
 
-import me.daarkii.bungee.bungee.impl.BungeeImpl
-import me.daarkii.bungee.core.config.impl.messages.Message
-import me.daarkii.bungee.core.utils.PlaceHolder
-import net.kyori.adventure.text.Component
-import net.md_5.bungee.api.event.ServerSwitchEvent
+import me.daarkii.bungee.core.BungeeSystem
+import me.daarkii.bungee.core.event.impl.JoinEvent
+import net.md_5.bungee.api.event.ServerConnectEvent
 import net.md_5.bungee.api.plugin.Listener
-import net.md_5.bungee.api.plugin.Plugin
 import net.md_5.bungee.event.EventHandler
 
-class PlayerListener(private val plugin: Plugin): Listener {
+class PlayerListener(private val bungeeSystem: BungeeSystem): Listener {
 
     @EventHandler
-    fun handleLogin(event: ServerSwitchEvent) {
+    fun handlePlayerJoin(event: ServerConnectEvent) {
 
-        val player = event.player
-        val audience = BungeeImpl.instance.adventure.player(player)
+        if(event.reason != ServerConnectEvent.Reason.JOIN_PROXY)
+            return
 
-        val header = Message.Wrapper.wrap(Message.instance.config.getString("messages.tablist.header"),
-            PlaceHolder("players", Component.text(player.server.info.players.size)),
-            PlaceHolder("maxplayers", Component.text(plugin.proxy.onlineCount)),
-            PlaceHolder("server", Component.text(player.server.info.name)))
+        bungeeSystem.userHandler.createUser(event.player.uniqueId, event.player.name).join()
 
-        val footer = Message.Wrapper.wrap(Message.instance.config.getString("messages.tablist.footer"),
-            PlaceHolder("players", Component.text(player.server.info.players.size)),
-            PlaceHolder("maxplayers", Component.text(plugin.proxy.onlineCount)),
-            PlaceHolder("server", Component.text(player.server.info.name)))
+        val user = bungeeSystem.getUser(event.player.uniqueId).join()!!
+        val joinEvent = JoinEvent(user, "", event.isCancelled)
 
-        audience.sendPlayerListHeaderAndFooter(header, footer)
+        //finally call event
+        bungeeSystem.pluginHandler.callEvent(joinEvent)
+
+        event.isCancelled = joinEvent.isCancelled
     }
 
 }
