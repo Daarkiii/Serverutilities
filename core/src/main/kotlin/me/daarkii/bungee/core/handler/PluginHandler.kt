@@ -2,10 +2,14 @@ package me.daarkii.bungee.core.handler
 
 import me.daarkii.bungee.core.command.Command
 import me.daarkii.bungee.core.event.*
+import me.daarkii.bungee.core.event.EventListener
+import me.daarkii.bungee.core.utils.TripleMap
 import java.lang.reflect.Method
-import java.util.LinkedList
+import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.collections.HashMap
+import kotlin.collections.HashSet
 
 abstract class PluginHandler {
 
@@ -62,6 +66,10 @@ abstract class PluginHandler {
                 prioritySorted[priority] = current
             }
         }
+
+        val tripleMap: TripleMap<UUID, Long, Double> = TripleMap()
+
+        Random().nextLong()
 
         //high priority
         if(prioritySorted.containsKey(EventPriority.HIGH)) {
