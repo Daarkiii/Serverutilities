@@ -8,6 +8,9 @@ import me.daarkii.bungee.core.config.Config
 import me.daarkii.bungee.core.config.impl.CommandFile
 import me.daarkii.bungee.core.config.impl.SettingFile
 import me.daarkii.bungee.core.config.impl.messages.Message
+import me.daarkii.bungee.core.data.UserRegistry
+import me.daarkii.bungee.core.handler.user.MongoUserHandler
+import me.daarkii.bungee.core.handler.user.UserHandler
 import me.daarkii.bungee.core.`object`.Console
 import me.daarkii.bungee.core.`object`.OfflineUser
 import me.daarkii.bungee.core.`object`.User
@@ -37,6 +40,7 @@ abstract class BungeeSystem(
 
         //Create an instance for the Settings class
         Settings()
+        UserRegistry()
 
         //load Files
         settingFile = SettingFile(dataFolder)
@@ -95,13 +99,18 @@ abstract class BungeeSystem(
     val debugMode: Boolean
         get() = settingFile.getBoolean("debug")
 
-    var mySQL: MySQL? = null
+    private var mySQL: MySQL? = null
 
-    var mongo: MongoDB? = null
+    private var mongo: MongoDB? = null
 
     protected fun setInstance(bs: BungeeSystem) {
         instance = bs
     }
+
+    val userHandler: UserHandler
+        get() {
+            return MongoUserHandler(mongo!!)
+        }
 
     /**
      * Disables this plugin

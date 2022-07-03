@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.7.0"
+    id("java")
     id ("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
@@ -11,6 +12,7 @@ allprojects {
     version = "1.0.1"
 
     apply {
+        plugin("java")
         plugin("org.jetbrains.kotlin.jvm")
         plugin("com.github.johnrengelman.shadow")
     }

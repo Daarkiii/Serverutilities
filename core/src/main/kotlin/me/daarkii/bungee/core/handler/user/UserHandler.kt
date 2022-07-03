@@ -2,6 +2,7 @@ package me.daarkii.bungee.core.handler.user
 
 import me.daarkii.bungee.core.`object`.User
 import java.util.UUID
+import java.util.concurrent.CompletableFuture
 
 interface UserHandler {
 
@@ -11,7 +12,7 @@ interface UserHandler {
      * 3 = name
      * 4 = first join
      * 5 = last join
-     * 6 = online time (in seconds)
+     * 6 = online time (in minutes)
      */
 
     /**
@@ -29,6 +30,33 @@ interface UserHandler {
     fun isExist(id: Long) : Boolean
 
     /**
+     * Gets the uuid from the given name
+     *
+     * @param name of the user
+     */
+    fun getUUID(name: String) : UUID
+
+    /**
+     * Gets the id from the given uuid
+     *
+     * @param uuid of the user
+     */
+    fun getID(uuid: UUID) : Long
+
+    /**
+     * Generates a new ID for the user object
+     */
+    fun generateID() : Long
+
+    /**
+     * Check if the given name is multiple times in the database,
+     * so we need to fetch the name with the uuid
+     *
+     * @param name of the user
+     */
+    fun checkExistingNames(name: String)
+
+    /**
      * Safes all stored data from the cache in the database
      * Mostly used when the user disconnects
      *
@@ -39,8 +67,16 @@ interface UserHandler {
     /**
      * Loads all data from the database and insert it in the cache
      *
-     * @param user the user to safe
+     * @param id the id of the user
      */
-    fun loadData(user: User)
+    fun loadData(id: Long) : CompletableFuture<Array<out Any>>
+
+    /**
+     * Creates the User in the database
+     *
+     * @param uuid of the user
+     * @param name of the user
+     */
+    fun createUser(uuid: UUID, name: String) : CompletableFuture<Void>
 
 }

@@ -11,7 +11,6 @@ class BungeeHook : Plugin() {
 
     override fun onEnable() {
         BungeeImpl(this)
-        this.proxy.pluginManager.registerListener(this, PlayerListener(this))
     }
 
     override fun onDisable() {
