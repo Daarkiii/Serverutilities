@@ -14,4 +14,22 @@ class BungeeOfflineUser(
 
     override val isOnline = ProxyServer.getInstance().getPlayer(uuid) != null
 
+    override fun equals(other: Any?): Boolean {
+
+        if(other == null)
+            return false
+
+        if(this === other)
+            return true
+
+        if(other !is OfflineUser)
+            return false
+
+        return this.id == other.id
+    }
+
+    override fun hashCode(): Int {
+        return this.id.hashCode()
+    }
+
 }

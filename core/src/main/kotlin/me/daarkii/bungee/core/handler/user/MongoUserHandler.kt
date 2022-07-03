@@ -146,25 +146,26 @@ class MongoUserHandler(mongo: MongoDB) : UserHandler {
     override fun createUser(uuid: UUID, name: String): CompletableFuture<Void> {
         return CompletableFuture.runAsync {
 
-            if (this.isExist(uuid))
-                return@runAsync
+            if (!this.isExist(uuid)) {
 
-            println("Create")
-            println("Create")
-            println("Create")
-            println("Create")
-            println("Create")
-            println("Create")
+                println("Create")
+                println("Create")
+                println("Create")
+                println("Create")
+                println("Create")
+                println("Create")
 
-            val document = Document()
-                .append("id", this.generateID())
-                .append("uuid", uuid.toString())
-                .append("name", name)
-                .append("firstJoin", System.currentTimeMillis())
-                .append("lastJoin", System.currentTimeMillis())
-                .append("onlineTime", 0)
+                val document = Document()
+                    .append("id", this.generateID())
+                    .append("uuid", uuid.toString())
+                    .append("name", name)
+                    .append("firstJoin", System.currentTimeMillis())
+                    .append("lastJoin", System.currentTimeMillis())
+                    .append("onlineTime", (0).toLong())
 
-            collection.insertOne(document)
+                collection.insertOne(document)
+            }
+
         }
     }
 }

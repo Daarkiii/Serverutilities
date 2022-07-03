@@ -4,6 +4,8 @@ import me.daarkii.bungee.bungee.BungeeHook
 import me.daarkii.bungee.bungee.impl.`object`.BungeeConsole
 import me.daarkii.bungee.bungee.impl.`object`.user.BungeeOfflineUser
 import me.daarkii.bungee.bungee.impl.`object`.user.BungeeUser
+import me.daarkii.bungee.bungee.impl.`object`.user.online.CloudNetUser
+import me.daarkii.bungee.bungee.impl.`object`.user.online.DefaultUser
 import me.daarkii.bungee.bungee.listener.PlayerListener
 import me.daarkii.bungee.core.BungeeSystem
 import me.daarkii.bungee.core.data.UserRegistry
@@ -11,6 +13,7 @@ import me.daarkii.bungee.core.`object`.Console
 import me.daarkii.bungee.core.`object`.OfflineUser
 import me.daarkii.bungee.core.`object`.User
 import me.daarkii.bungee.core.utils.Platform
+import me.daarkii.bungee.core.utils.Settings
 import net.kyori.adventure.platform.bungeecord.BungeeAudiences
 import java.util.*
 import java.util.concurrent.CompletableFuture
@@ -60,21 +63,20 @@ class BungeeImpl(private val bungee: BungeeHook) : BungeeSystem(
             if(loaded != null)
                 return@supplyAsync loaded
 
-            if(bungee.proxy.getPlayer(uuid) == null)
+            if(!userHandler.isExist(uuid))
                 return@supplyAsync null
 
             val id = userHandler.getID(uuid)
-            var user: User? = null
+            val data = userHandler.loadData(id).join()
 
-            userHandler.loadData(id).thenAccept { data ->
-                user = BungeeUser(id, uuid, this, data[3] as Long, data[4] as Long, data[5] as Long)
-            }
+            var user: User
 
-            while (user == null) {
-                TimeUnit.MILLISECONDS.sleep(100)
-            }
+            if(Settings.instance.isCloudNetActive)
+                user = CloudNetUser(id, uuid, this, data[3] as Long, data[4] as Long, data[5] as Long)
+            else
+                user = DefaultUser(id, uuid, this, data[3] as Long, data[4] as Long, data[5] as Long)
 
-            UserRegistry.instance.createUser(user!!)
+            UserRegistry.instance.createUser(user)
             user
         }
     }
@@ -91,17 +93,10 @@ class BungeeImpl(private val bungee: BungeeHook) : BungeeSystem(
                 return@supplyAsync null
 
             val id = userHandler.getID(uuid)
-            var user: OfflineUser? = null
+            val data = userHandler.loadData(id).join()
+            val user: OfflineUser = BungeeOfflineUser(id, uuid, data[3] as Long, data[4] as Long, data[5] as Long)
 
-            userHandler.loadData(id).thenAccept { data ->
-                user = BungeeOfflineUser(id, uuid, data[3] as Long, data[4] as Long, data[5] as Long)
-            }
-
-            while (user == null) {
-                TimeUnit.MILLISECONDS.sleep(100)
-            }
-
-            UserRegistry.instance.createOfflineUser(user!!)
+            UserRegistry.instance.createOfflineUser(user)
             user
         }
     }
