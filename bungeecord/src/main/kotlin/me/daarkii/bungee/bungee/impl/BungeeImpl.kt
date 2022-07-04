@@ -4,6 +4,7 @@ import me.daarkii.bungee.bungee.BungeeHook
 import me.daarkii.bungee.bungee.impl.`object`.BungeeConsole
 import me.daarkii.bungee.bungee.impl.`object`.user.BungeeOfflineUser
 import me.daarkii.bungee.bungee.impl.`object`.user.BungeeUser
+import me.daarkii.bungee.bungee.impl.`object`.user.offline.CloudNetOfflineUser
 import me.daarkii.bungee.bungee.impl.`object`.user.online.CloudNetUser
 import me.daarkii.bungee.bungee.impl.`object`.user.online.DefaultUser
 import me.daarkii.bungee.bungee.listener.PlayerListener
@@ -69,12 +70,10 @@ class BungeeImpl(private val bungee: BungeeHook) : BungeeSystem(
             val id = userHandler.getID(uuid)
             val data = userHandler.loadData(id).join()
 
-            var user: User
-
-            if(Settings.instance.isCloudNetActive)
-                user = CloudNetUser(id, uuid, this, data[3] as Long, data[4] as Long, data[5] as Long)
+            val user: User = if(Settings.instance.isCloudNetActive)
+                CloudNetUser(id, uuid, this, data[3] as Long, data[4] as Long, data[5] as Long)
             else
-                user = DefaultUser(id, uuid, this, data[3] as Long, data[4] as Long, data[5] as Long)
+                DefaultUser(id, uuid, this, data[3] as Long, data[4] as Long, data[5] as Long)
 
             UserRegistry.instance.createUser(user)
             user
@@ -94,7 +93,7 @@ class BungeeImpl(private val bungee: BungeeHook) : BungeeSystem(
 
             val id = userHandler.getID(uuid)
             val data = userHandler.loadData(id).join()
-            val user: OfflineUser = BungeeOfflineUser(id, uuid, data[3] as Long, data[4] as Long, data[5] as Long)
+            val user: OfflineUser = CloudNetOfflineUser(id, uuid, data[3] as Long, data[4] as Long, data[5] as Long, data[2] as String)
 
             UserRegistry.instance.createOfflineUser(user)
             user

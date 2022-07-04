@@ -1,5 +1,6 @@
 package me.daarkii.bungee.core.`object`
 
+import net.kyori.adventure.text.Component
 import java.util.UUID
 
 interface GenericUser {
@@ -9,6 +10,18 @@ interface GenericUser {
      * @return the id
      */
     val id: Long
+
+    /**
+     * Gets the name of the offlineUser
+     * @return the last known name of the User
+     */
+    val name: String
+
+    /**
+     * Gets the colored name of the offlineUser
+     * @return the colored name or the normal name if the server is not using CloudNet or the player is online
+     */
+    val displayName: String
 
     /**
      * Gets the uuid of the user
