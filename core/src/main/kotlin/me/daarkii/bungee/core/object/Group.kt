@@ -1,6 +1,6 @@
 package me.daarkii.bungee.core.`object`
 
-class Group(
+data class Group(
     var id: Long,
     var name: String,
     var potency: Int,

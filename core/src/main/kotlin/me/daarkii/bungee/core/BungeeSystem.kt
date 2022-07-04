@@ -9,6 +9,8 @@ import me.daarkii.bungee.core.config.impl.CommandFile
 import me.daarkii.bungee.core.config.impl.SettingFile
 import me.daarkii.bungee.core.config.impl.messages.Message
 import me.daarkii.bungee.core.data.UserRegistry
+import me.daarkii.bungee.core.handler.group.GroupHandler
+import me.daarkii.bungee.core.handler.group.MongoGroupHandler
 import me.daarkii.bungee.core.handler.user.MongoUserHandler
 import me.daarkii.bungee.core.handler.user.UserHandler
 import me.daarkii.bungee.core.`object`.Console
@@ -110,6 +112,11 @@ abstract class BungeeSystem(
     val userHandler: UserHandler
         get() {
             return MongoUserHandler(mongo!!)
+        }
+
+    val groupHandler: GroupHandler
+        get() {
+            return MongoGroupHandler(mongo!!)
         }
 
     /**

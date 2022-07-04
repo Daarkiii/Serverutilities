@@ -37,7 +37,7 @@ class Message(private val name: String, private val dataFolder: File) {
 
         @JvmStatic
         fun wrap(msg: String) : Component {
-            return MiniMessage.miniMessage().deserialize(this.migrate(msg))
+            return MiniMessage.miniMessage().deserialize(this.migrate(msg), Placeholder.component("prefix", instance.prefix))
         }
 
         @JvmStatic
@@ -46,7 +46,7 @@ class Message(private val name: String, private val dataFolder: File) {
             val list: MutableList<TagResolver> = ArrayList()
             placeHolder.iterator().forEach { holder -> list.add(Placeholder.component(holder.name, holder.component)) }
 
-            return MiniMessage.miniMessage().deserialize(this.migrate(msg), *list.toTypedArray())
+            return MiniMessage.miniMessage().deserialize(this.migrate(msg), Placeholder.component("prefix", instance.prefix),  *list.toTypedArray())
         }
 
         @JvmStatic

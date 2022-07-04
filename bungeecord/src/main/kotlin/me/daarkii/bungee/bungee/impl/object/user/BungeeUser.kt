@@ -3,9 +3,9 @@ package me.daarkii.bungee.bungee.impl.`object`.user
 import me.daarkii.bungee.bungee.impl.BungeeImpl
 import me.daarkii.bungee.core.config.impl.messages.Message
 import me.daarkii.bungee.core.`object`.User
+import me.daarkii.bungee.core.utils.PlaceHolder
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
-import net.kyori.adventure.text.minimessage.MiniMessage
 import net.md_5.bungee.api.ProxyServer
 import java.util.*
 
@@ -37,6 +37,15 @@ abstract class BungeeUser(
      */
     override fun sendMessage(msg: String) {
         proxy.adventure.player(this.proxiedPlayer).sendMessage(Message.Wrapper.wrap(msg))
+    }
+
+    /**
+     * Sends the given message to the command sender
+     * @param msg the message to send
+     * @param placeHolder which should be replaced
+     */
+    override fun sendMessage(msg: String, vararg placeHolder: PlaceHolder) {
+        proxy.adventure.player(this.proxiedPlayer).sendMessage(Message.Wrapper.wrap(msg, *placeHolder))
     }
 
     /**
@@ -95,6 +104,10 @@ abstract class BungeeUser(
         }
 
     override val ping = this.proxiedPlayer.ping
+
+    override fun executeCommand(cmd: String) {
+        ProxyServer.getInstance().pluginManager.dispatchCommand(this.proxiedPlayer, cmd)
+    }
 
     private val proxiedPlayer
         get() = ProxyServer.getInstance().getPlayer(uuid)
