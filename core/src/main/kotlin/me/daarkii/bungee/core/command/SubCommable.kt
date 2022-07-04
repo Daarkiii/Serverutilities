@@ -22,7 +22,7 @@ abstract class SubCommable(name: String, permission: String, vararg aliases: Str
         this.getSubCommands().forEach { subCommand ->
             subCommand.names.forEach { name ->
                 if(name.equals(args[0], ignoreCase = true))
-                    subCommand.execute(sender, remainingArgs)
+                    subCommand.execute(sender, remainingArgs.toTypedArray())
             }
         }
 
