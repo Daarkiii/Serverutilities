@@ -1,6 +1,7 @@
 package me.daarkii.bungee.core.utils
 
 import java.util.concurrent.ConcurrentHashMap
+import java.util.function.Supplier
 
 class TripleMap<K, S, V> {
 
@@ -67,11 +68,15 @@ class TripleMap<K, S, V> {
         this.keyTwo.remove(secondKey)
     }
 
+    val size = this.wrappedOne.size
+
     fun clear() {
         this.wrappedOne.clear()
         this.wrappedTwo.clear()
         this.keyOne.clear()
         this.keyTwo.clear()
     }
+
+    val values: MutableCollection<V> = this.keyOne.values
 
 }

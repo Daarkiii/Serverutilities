@@ -15,6 +15,10 @@ abstract class Command(
         return Collections.emptyList()
     }
 
+    open fun getSubCommands() : MutableList<SubCommand> {
+        return Collections.emptyList()
+    }
+
     val aliases: MutableList<String>
         get() = mutableListOf(*aliasesObj)
 

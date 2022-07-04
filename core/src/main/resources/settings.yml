@@ -25,4 +25,12 @@ mongo:
 
 # Select your language here. Look into the messages' folder for available languages and names
 language: "en_EN"
-test1: false
+
+# Set up your groups here, they will be used for colors and in other modules
+# general format: [group-name], [priority], [color], [permission]
+# if you use cloudPerms you don't need to set up your groups
+groups:
+  useCloudPerms: false
+  default: "Player, 0, &7"
+  list:
+    - "Admin, 100, &4, bungee.admin"
