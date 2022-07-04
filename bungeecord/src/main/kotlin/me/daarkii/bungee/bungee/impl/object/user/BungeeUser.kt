@@ -20,7 +20,7 @@ abstract class BungeeUser(
 
     override val name: String = this.proxiedPlayer.name
 
-    override val displayName: String = this.proxiedPlayer.displayName
+    abstract override val displayName: String
 
     /**
      * Checks if the command sender has the given permission
@@ -60,7 +60,7 @@ abstract class BungeeUser(
      * @param miniMsg the not deserialized MiniMessage String
      */
     override fun sendMiniMessage(miniMsg: String) {
-        proxy.adventure.player(this.proxiedPlayer).sendMessage(MiniMessage.miniMessage().deserialize(miniMsg))
+        proxy.adventure.player(this.proxiedPlayer).sendMessage(Message.Wrapper.wrap(miniMsg))
     }
 
     override val isOnline: Boolean

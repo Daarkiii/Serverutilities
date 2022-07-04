@@ -12,10 +12,16 @@ class CloudNetUser(
     proxy: BungeeImpl,
     firstJoin: Long,
     lastJoin: Long,
-    onlineTime: Long
+    onlineTime: Long,
 ) : BungeeUser(id, uuid, proxy, firstJoin, lastJoin, onlineTime) {
 
     private val playerManager = CloudNetDriver.getInstance().servicesRegistry.getFirstService(IPlayerManager::class.java)
+
+    override val displayName: String
+        get() {
+            val user =  CloudNetDriver.getInstance().permissionManagement.getUser(uuid) ?: return name
+            return CloudNetDriver.getInstance().permissionManagement.getHighestPermissionGroup(user).color.replace("&", "§") + name
+        }
 
     override fun connect(server: String) {
         playerManager.getPlayerExecutor(uuid).connect(server)

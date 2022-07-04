@@ -14,6 +14,8 @@ class DefaultUser(
     onlineTime: Long
 ) : BungeeUser(id, uuid, proxy, firstJoin, lastJoin, onlineTime) {
 
+    override val displayName: String = ProxyServer.getInstance().getPlayer(uuid).displayName
+
     override fun connect(server: String) {
 
         val player = ProxyServer.getInstance().getPlayer(uuid)
