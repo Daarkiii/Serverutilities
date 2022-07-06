@@ -20,12 +20,23 @@ interface GroupHandler {
      * Gets a cached group object with the given id
      * @return the group object if the group is existing otherwise null
      */
-    fun getGroup(id: Long) : CompletableFuture<Group?>
+    fun getGroup(id: Int) : CompletableFuture<Group?>
+
+    /**
+     * Gets the name of the group with the id
+     * @return the name of the group with the id or null
+     */
+    fun getName(id: Int) : CompletableFuture<String?>
 
     /**
      * Safes a group in the database
      */
     fun safeGroup(group: Group)
+
+    /**
+     * Gets all groups from the cache
+     */
+    val groups: Collection<Group>
 
     /**
      * Loads every group on startup and safes them in the cache

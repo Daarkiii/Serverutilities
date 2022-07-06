@@ -3,7 +3,6 @@ package me.daarkii.bungee.core.handler
 import me.daarkii.bungee.core.command.Command
 import me.daarkii.bungee.core.event.*
 import me.daarkii.bungee.core.event.EventListener
-import me.daarkii.bungee.core.utils.TripleMap
 import java.lang.reflect.Method
 import java.util.*
 import java.util.concurrent.CompletableFuture
@@ -66,8 +65,6 @@ abstract class PluginHandler {
                 prioritySorted[priority] = current
             }
         }
-
-        val tripleMap: TripleMap<UUID, Long, Double> = TripleMap()
 
         Random().nextLong()
 

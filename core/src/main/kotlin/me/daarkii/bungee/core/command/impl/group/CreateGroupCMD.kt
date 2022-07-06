@@ -1,4 +1,4 @@
-package me.daarkii.bungee.core.command.impl.group.sub
+package me.daarkii.bungee.core.command.impl.group
 
 import me.daarkii.bungee.core.BungeeSystem
 import me.daarkii.bungee.core.command.SubCommand
@@ -20,18 +20,16 @@ class CreateGroupCMD : SubCommand {
      */
     override fun execute(sender: CommandSender, args: Array<String>) {
 
-        if(args.size != 2 && args.size != 3) {
+        //<group> <create> || <name> <potency> <permission>
+        if(args.size != 3) {
             sender.sendMessage(config.getString("$messagePath.help"))
             return
         }
 
         val name = args[0]
+        val permission = args[2]
+
         var potency = 0
-
-        var permission = ""
-
-        if(args.size == 3)
-            permission = args[2]
 
         kotlin.runCatching {
             potency = args[1].toInt()
@@ -50,6 +48,7 @@ class CreateGroupCMD : SubCommand {
             BungeeSystem.getInstance().groupHandler.createGroup(name, potency, permission, "&7").thenAccept { created ->
                 sender.sendMessage(config.getString("$messagePath.groupCreated"), PlaceHolder("name", created.name))
             }
+
         }
     }
 

@@ -3,13 +3,13 @@ package me.daarkii.bungee.core.handler.group
 import com.mongodb.client.model.Filters
 import me.daarkii.bungee.core.`object`.Group
 import me.daarkii.bungee.core.storage.MongoDB
-import me.daarkii.bungee.core.utils.TripleMap
 import org.bson.Document
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ConcurrentHashMap
 
 class MongoGroupHandler(mongo: MongoDB) : GroupHandler {
 
-    private val groupCache: TripleMap<Long, String, Group> = TripleMap()
+    private val groupCache: MutableMap<String, Group> = ConcurrentHashMap()
     private val collection = mongo.getCollection("groups")
 
     /**
@@ -21,11 +21,11 @@ class MongoGroupHandler(mongo: MongoDB) : GroupHandler {
             if(group != null)
                 return@thenApply group
 
-            val nextID = (groupCache.size + 1).toLong()
+            val nextID = (collection.countDocuments() + 1).toInt()
             val created = Group(nextID, name, potency, permission, color)
 
             //add to the cache
-            groupCache.insert(nextID, name, created)
+            groupCache[name] = created
 
             //create in database
             this.safeGroup(created)
@@ -34,24 +34,37 @@ class MongoGroupHandler(mongo: MongoDB) : GroupHandler {
         }
     }
 
+    override val groups: Collection<Group> = groupCache.values
+
     /**
      * Gets a cached group object with the given name
      * @return the group object if the group is existing otherwise null
      */
     override fun getGroup(name: String): CompletableFuture<Group?> {
-        return CompletableFuture.supplyAsync {
-            groupCache.get(name)
-        }
+        println(groupCache)
+        return CompletableFuture.supplyAsync { groupCache[name] }
     }
 
     /**
      * Gets a cached group object with the given id
      * @return the group object if the group is existing otherwise null
      */
-    override fun getGroup(id: Long): CompletableFuture<Group?> {
-        return CompletableFuture.supplyAsync {
-            groupCache.get(id)
+    override fun getGroup(id: Int): CompletableFuture<Group?> {
+        return this.getName(id).thenApply {
+
+            if(it == null)
+                return@thenApply null
+
+            this.getGroup(it).join()
         }
+    }
+
+    /**
+     * Gets the name of the group with the id
+     * @return the name of the group with the id or null
+     */
+    override fun getName(id: Int): CompletableFuture<String?> {
+        return CompletableFuture.supplyAsync { collection.find(Filters.eq("id", id)).first()?.getString("name") }
     }
 
     /**
@@ -76,15 +89,31 @@ class MongoGroupHandler(mongo: MongoDB) : GroupHandler {
      * Loads every group on startup and safes them in the cache
      */
     override fun loadGroups() {
+
+        //Check if the default group exist
+        if(this.collection.find(Filters.eq("id", 1)).first() == null) {
+
+            //Create default group it will be registered later
+            val document = Document()
+                .append("id", 1) //the id is everytime 1
+                .append("name", "default")
+                .append("potency", 0)
+                .append("permission", "")
+                .append("color", "&7")
+
+            this.collection.insertOne(document)
+        }
+
+        //Register every group which exists
         this.collection.find().iterator().forEach { document ->
             val group = Group(
-                document.getLong("id"),
+                document.getInteger("id"),
                 document.getString("name"),
                 document.getInteger("potency"),
                 document.getString("permission"),
                 document.getString("color"))
 
-            this.groupCache.insert(group.id, group.name, group)
+            this.groupCache[group.name] = group
         }
     }
 

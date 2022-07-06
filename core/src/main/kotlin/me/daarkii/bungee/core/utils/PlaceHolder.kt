@@ -15,7 +15,9 @@ class PlaceHolder {
 
     constructor(name: String, value: String) {
         this.name = name
-        this.component = Message.Wrapper.wrap(value)
+
+        if(value != "")
+            this.component = Message.Wrapper.wrap(value)
     }
 
 }

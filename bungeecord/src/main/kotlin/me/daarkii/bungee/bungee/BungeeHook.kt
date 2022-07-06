@@ -9,11 +9,14 @@ import net.md_5.bungee.api.plugin.Plugin
  */
 class BungeeHook : Plugin() {
 
+    private lateinit var impl: BungeeImpl
+
     override fun onEnable() {
-        BungeeImpl(this)
+        impl = BungeeImpl(this)
     }
 
     override fun onDisable() {
+        impl.stop()
     }
 
 }

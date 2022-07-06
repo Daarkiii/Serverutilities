@@ -21,14 +21,15 @@ messages:
         commaColor: '<c:white>'
         addonColor: '<c:green>'
       group:
-        help: """<prefix><c:gray>group-help</c>
-        <c:dark_gray>»</c> <c:auqua>create</c> <c:gray><name> <potency> </c>
-        <c:dark_gray>»</c> <c:auqua>info</c> <c:gray><name>/<id> </c>
-        <c:dark_gray>»</c> <c:auqua><name></c> setColor <color> </c>
-        <c:dark_gray>»</c> <c:auqua><name></c> setPermission <color> </c>
-        <c:dark_gray>»</c> <c:auqua><name></c> setName <newName> </c>
-        <c:dark_gray>»</c> <c:auqua><name></c> setPotency <potency> </c>"""
+        help: "<prefix><c:gray>group-help</c> <newLine>
+         <c:dark_gray>»</c> <c:gray>group<c:aqua>create</c> {name} {potency} </c> <newLine>
+        <c:dark_gray>»</c> <c:gray>group <c:aqua>info</c>{name}/{id} </c> <newLine> 
+        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c>setColor {color} </c> <newLine> 
+        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c>setPermission {permission} </c> <newLine> 
+        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c> setName {newName}</c> <newLine> 
+        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c> setPotency {potency}</c>"
         notExist: "<prefix><c:gray>The group <c:aqua><name></c> doesn't exist!</c>"
         existAlready: "<prefix><c:gray>The group <c:aqua><name></c> exist already.</c>"
         noNumber: '<prefix><c:gray>The potency <c:red>must</c> be a number!</c>'
         groupCreated: '<prefix><c:gray>>You created the group <name> <c:green>successfully</c>!</c>'
+        changedPotency: '<prefix><c:gray>You have <c:green>successfully</c> changed the potency of the group <group></c>'
