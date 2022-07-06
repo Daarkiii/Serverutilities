@@ -24,10 +24,10 @@ messages:
         help: "<prefix><c:gray>group-help</c> <newLine>
          <c:dark_gray>»</c> <c:gray>group<c:aqua>create</c> {name} {potency} </c> <newLine>
         <c:dark_gray>»</c> <c:gray>group <c:aqua>info</c>{name}/{id} </c> <newLine> 
-        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c>setColor {color} </c> <newLine> 
-        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c>setPermission {permission} </c> <newLine> 
-        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c> setName {newName}</c> <newLine> 
-        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c> setPotency {potency}</c>"
+        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c>set color {color} </c> <newLine> 
+        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c>set permission {permission} </c> <newLine> 
+        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c> set name {newName}</c> <newLine> 
+        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c> set potency {potency}</c>"
         notExist: "<prefix><c:gray>The group <c:aqua><name></c> doesn't exist!</c>"
         existAlready: "<prefix><c:gray>The group <c:aqua><name></c> exist already.</c>"
         noNumber: '<prefix><c:gray>The potency <c:red>must</c> be a number!</c>'
