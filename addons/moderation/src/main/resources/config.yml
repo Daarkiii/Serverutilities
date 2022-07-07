@@ -1,0 +1,7 @@
+# BanAddon by Daarkii
+
+useBanFeature: true
+useMuteFeature: true
+
+# Every time will be displayed like this format
+timeFormat: "yyyy-MM-dd HH:mm:ss"
