@@ -17,6 +17,11 @@ interface GroupHandler {
     fun getGroup(name: String) : CompletableFuture<Group?>
 
     /**
+     * Changes the name of the group in the cache
+     */
+    fun changeGroupName(oldName: String, group: Group) : CompletableFuture<Void>
+
+    /**
      * Gets a cached group object with the given id
      * @return the group object if the group is existing otherwise null
      */
@@ -38,6 +43,11 @@ interface GroupHandler {
      * Safes a group in the database
      */
     fun safeGroup(group: Group)
+
+    /**
+     * Deletes a group out of the database && removes it from the cache
+     */
+    fun deleteGroup(group: Group)
 
     /**
      * Gets all groups from the cache

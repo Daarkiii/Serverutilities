@@ -41,8 +41,7 @@ class Message(private val name: String, private val dataFolder: File) {
 
         @JvmStatic
         fun wrap(msg: String) : Component {
-            val migrated = this.migrate(msg)
-            return MiniMessage.miniMessage().deserialize(msg, Placeholder.component("prefix", instance.prefix))
+            return MiniMessage.miniMessage().deserialize(this.migrate(msg), Placeholder.component("prefix", instance.prefix))
         }
 
         @JvmStatic

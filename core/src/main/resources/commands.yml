@@ -10,12 +10,13 @@ addons:
     - "addon"
     - "addoninfo"
     - "addoninfos"
-
 group:
   name: 'group'
   permission: 'bungee.*'
   aliases:
-    - "groups"
     - "bungeegroup"
     - "bungeegroups"
+groups:
+  name: 'groups'
+  permission: 'bungee.*'
 

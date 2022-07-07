@@ -16,6 +16,7 @@
 
 package me.daarkii.bungee.core.command.impl.group
 
+import me.daarkii.bungee.core.BungeeSystem
 import me.daarkii.bungee.core.command.SubCommand
 import me.daarkii.bungee.core.config.impl.messages.Message
 import me.daarkii.bungee.core.`object`.CommandSender
@@ -38,11 +39,23 @@ class SetNameCMD(private val group: Group) : SubCommand {
 
         val name = args[0]
 
-        group.name = name
-        sender.sendMessage(config.getString("$messagePath.changedName"),
-            PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")),
-            PlaceHolder("value", Message.Wrapper.wrap(name))
-        )
+        BungeeSystem.getInstance().groupHandler.getGroup(name).thenAccept {
+
+            if(it != null) {
+                sender.sendMessage(config.getString("$messagePath.existAlready"), PlaceHolder("name", Message.Wrapper.wrap(it.color + it.name + "</c>")))
+                return@thenAccept
+            }
+
+            //Update in Cache
+            BungeeSystem.getInstance().groupHandler.changeGroupName(group.name, group)
+
+            //Update the object and send message to the User
+            group.name = name
+
+            sender.sendMessage(config.getString("$messagePath.changedName"),
+                PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")),
+                PlaceHolder("value", Message.Wrapper.wrap(name)))
+        }
     }
 
 }

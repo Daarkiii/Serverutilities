@@ -52,7 +52,7 @@ class SetDefaultCMD(private val group: Group) : SubCommand {
         val defaultGroup = BungeeSystem.getInstance().groupHandler.defaultGroup
 
         if(defaultGroup == group) {
-            sender.sendMessage(config.getString("$messagePath.falseValue"),
+            sender.sendMessage(config.getString("$messagePath.alreadyDefaultGroup"),
                 PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")))
             return
         }

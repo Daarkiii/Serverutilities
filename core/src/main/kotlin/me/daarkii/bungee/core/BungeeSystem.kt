@@ -2,6 +2,7 @@ package me.daarkii.bungee.core
 
 import me.daarkii.bungee.core.addon.AddonHandler
 import me.daarkii.bungee.core.command.impl.AddonCMD
+import me.daarkii.bungee.core.command.impl.GroupsCMD
 import me.daarkii.bungee.core.handler.PluginHandler
 import me.daarkii.bungee.core.command.impl.TestCMD
 import me.daarkii.bungee.core.command.impl.group.GroupCMD
@@ -109,6 +110,7 @@ abstract class BungeeSystem(
         this.pluginHandler.registerCommand(TestCMD())
         this.pluginHandler.registerCommand(AddonCMD(this))
         this.pluginHandler.registerCommand(GroupCMD(this))
+        this.pluginHandler.registerCommand(GroupsCMD(this))
     }
 
     val debugMode: Boolean

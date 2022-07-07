@@ -21,6 +21,7 @@ import me.daarkii.bungee.core.config.impl.messages.Message
 import me.daarkii.bungee.core.`object`.CommandSender
 import me.daarkii.bungee.core.`object`.Group
 import me.daarkii.bungee.core.utils.PlaceHolder
+import net.kyori.adventure.text.Component
 
 class InfoCMD(private val group: Group) : SubCommand {
 
@@ -38,7 +39,7 @@ class InfoCMD(private val group: Group) : SubCommand {
         sender.sendMessage(config.getString("$messagePath.info"),
             PlaceHolder("name", group.name),
             PlaceHolder("coloredname", Message.Wrapper.wrap(group.color + group.name + "</c>")),
-            PlaceHolder("color", group.color),
+            PlaceHolder("color", Component.text(group.color)),
             PlaceHolder("potency", group.potency.toString()),
             PlaceHolder("permission", group.permission),
             PlaceHolder("default", group.default.toString()))

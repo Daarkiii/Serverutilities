@@ -1,6 +1,7 @@
 package me.daarkii.bungee.core.handler.group
 
 import com.mongodb.client.model.Filters
+import me.daarkii.bungee.core.BungeeSystem
 import me.daarkii.bungee.core.`object`.Group
 import me.daarkii.bungee.core.storage.MongoDB
 import org.bson.Document
@@ -42,7 +43,7 @@ class MongoGroupHandler(mongo: MongoDB) : GroupHandler {
      * @return the group object if the group is existing otherwise null
      */
     override fun getGroup(name: String): CompletableFuture<Group?> {
-        return CompletableFuture.supplyAsync { groupCache[name] }
+        return CompletableFuture.supplyAsync { groupCache[name.lowercase()] }
     }
 
     /**
@@ -56,6 +57,16 @@ class MongoGroupHandler(mongo: MongoDB) : GroupHandler {
                 return@thenApply null
 
             this.getGroup(it).join()
+        }
+    }
+
+    /**
+     * Changes the name of the group in the cache
+     */
+    override fun changeGroupName(oldName: String, group: Group): CompletableFuture<Void> {
+        return CompletableFuture.runAsync {
+            groupCache.remove(oldName)
+            groupCache[group.name] = group
         }
     }
 
@@ -87,6 +98,14 @@ class MongoGroupHandler(mongo: MongoDB) : GroupHandler {
             this.collection.replaceOne(Filters.eq("id", group.id), document)
         else
             this.collection.insertOne(document)
+    }
+
+    /**
+     * Deletes a group out of the database && removes it from the cache
+     */
+    override fun deleteGroup(group: Group) {
+        this.groupCache.remove(group.name)
+        this.collection.deleteOne(Filters.eq("id", group.id))
     }
 
     /**

@@ -6,7 +6,7 @@ import me.daarkii.bungee.core.config.impl.messages.Message
 import me.daarkii.bungee.core.`object`.CommandSender
 import me.daarkii.bungee.core.utils.PlaceHolder
 
-class CreateGroupCMD : SubCommand {
+class CreateCMD : SubCommand {
 
     override val names: MutableList<String> = mutableListOf("create", "creates")
 
@@ -26,7 +26,7 @@ class CreateGroupCMD : SubCommand {
             return
         }
 
-        val name = args[0]
+        val name = args[0].lowercase()
         val permission = args[2]
 
         var potency = 0

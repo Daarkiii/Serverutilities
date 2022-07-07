@@ -5,6 +5,7 @@ import me.daarkii.bungee.core.command.SubCommendable
 import me.daarkii.bungee.core.command.SubCommand
 import me.daarkii.bungee.core.config.impl.messages.Message
 import me.daarkii.bungee.core.`object`.CommandSender
+import me.daarkii.bungee.core.utils.PlaceHolder
 import java.util.LinkedList
 
 class GroupCMD(private val bungee: BungeeSystem) : SubCommendable(
@@ -19,7 +20,7 @@ class GroupCMD(private val bungee: BungeeSystem) : SubCommendable(
     override val helpMsg: String = config.getString("$messagePath.help")
 
     override fun getSubCommands(): MutableList<SubCommand> {
-        return mutableListOf(CreateGroupCMD())
+        return mutableListOf(CreateCMD(), DeleteCMD())
     }
 
     override fun onFailure(sender: CommandSender, args: Array<out String>) {
@@ -27,7 +28,7 @@ class GroupCMD(private val bungee: BungeeSystem) : SubCommendable(
         bungee.groupHandler.getGroup(args[0]).thenAccept { group ->
 
             if(group == null) {
-                sender.sendMessage(config.getString("$messagePath.notExist"))
+                sender.sendMessage(config.getString("$messagePath.notExist"), PlaceHolder("name", args[0]))
                 return@thenAccept
             }
 
@@ -37,9 +38,11 @@ class GroupCMD(private val bungee: BungeeSystem) : SubCommendable(
             var isExecuted = false
 
             for (line in args) {
-                if(line != args[0])
-                    finalArgs.add(line)
+                finalArgs.add(line)
             }
+
+            //remove the first  line, so we get the desired format
+            finalArgs.removeAt(0)
 
             if(args.size > 1) {
 

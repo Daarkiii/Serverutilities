@@ -20,8 +20,8 @@ class SetCMD(private val group: Group) : SubCommand {
      */
     override fun execute(sender: CommandSender, args: Array<String>) {
 
-        //<group> <groupName> <set> || <color, potency..> <value>
-        if(args.size != 2) {
+        //<group> <groupName> || <set> <color, potency..> <value>
+        if(args.size != 3) {
             sender.sendMessage(config.getString("$messagePath.help"))
             return
         }
@@ -30,10 +30,12 @@ class SetCMD(private val group: Group) : SubCommand {
 
         //build new args without args[0]
         for(line in args) {
-            if(line != args[0]) {
-                remainingArgs.add(line)
-            }
+            remainingArgs.add(line)
         }
+
+        //remove the first and the seconds line, so we get the desired format
+        remainingArgs.removeAt(0)
+        remainingArgs.removeAt(0)
 
         val subCommands: List<SubCommand> = listOf(
             SetColorCMD(group),
@@ -44,7 +46,7 @@ class SetCMD(private val group: Group) : SubCommand {
 
         for(subCommand in subCommands) {
             for(name in subCommand.names) {
-                if(args[0] == name) {
+                if(args[1] == name) {
                     subCommand.execute(sender, remainingArgs.toTypedArray())
                     return
                 }

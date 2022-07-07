@@ -29,7 +29,9 @@ class SetColorCMD(private val group: Group) : SubCommand {
             return
         }
 
-        if(!Message.Wrapper.migrate(replaced).contains("<c")) {
+        val replaceable = "&$replaced"
+
+        if(!Message.Wrapper.migrate(replaceable).contains("<c")) {
             sender.sendMessage(config.getString("$messagePath.falseColor"))
             return
         }
@@ -37,7 +39,7 @@ class SetColorCMD(private val group: Group) : SubCommand {
         group.color = "&$replaced"
         sender.sendMessage(config.getString("$messagePath.changedColor"),
             PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")),
-            PlaceHolder("value", Message.Wrapper.wrap(replaced))
+            PlaceHolder("value", "&$replaced")
         )
     }
 
