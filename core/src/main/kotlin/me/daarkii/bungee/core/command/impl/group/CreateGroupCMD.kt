@@ -38,6 +38,11 @@ class CreateGroupCMD : SubCommand {
             return
         }
 
+        if(potency < 1 || potency > 100) {
+            sender.sendMessage(config.getString("$messagePath.falsePotency"))
+            return
+        }
+
         BungeeSystem.getInstance().groupHandler.getGroup(name).thenAccept { group ->
 
             if(group != null) {

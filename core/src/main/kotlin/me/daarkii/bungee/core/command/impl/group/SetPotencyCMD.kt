@@ -29,8 +29,16 @@ class SetPotencyCMD(private val group: Group) : SubCommand {
             return
         }
 
+        if(potency < 1 || potency > 100) {
+            sender.sendMessage(config.getString("$messagePath.falsePotency"))
+            return
+        }
+
         group.potency = potency
-        sender.sendMessage(config.getString("$messagePath.changedPotency"), PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")))
+        sender.sendMessage(config.getString("$messagePath.changedPotency"),
+            PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")),
+            PlaceHolder("value", Message.Wrapper.wrap(potency.toString()))
+        )
     }
 
 }

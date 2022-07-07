@@ -31,5 +31,10 @@ messages:
         notExist: "<prefix><c:gray>The group <c:aqua><name></c> doesn't exist!</c>"
         existAlready: "<prefix><c:gray>The group <c:aqua><name></c> exist already.</c>"
         noNumber: '<prefix><c:gray>The potency <c:red>must</c> be a number!</c>'
+        falsePotency: '<prefix><c:gray>The potency must be between <c:gold>1-100</c>!</c>'
+        falseColor: '<prefix><c:gray>The color c:red>must</c> be a minecraft color code!</c>'
         groupCreated: '<prefix><c:gray>>You created the group <name> <c:green>successfully</c>!</c>'
-        changedPotency: '<prefix><c:gray>You have <c:green>successfully</c> changed the potency of the group <group></c>'
+        changedPotency: '<prefix><c:gray>You have <c:green>successfully</c> changed the potency of the group <group> to <value></c>'
+        changedColor: '<prefix><c:gray>You have <c:green>successfully</c> changed the color of the group <group> to <value></c>'
+        changedPermission: '<prefix><c:gray>You have <c:green>successfully</c> changed the permission of the group <group> to <value></c>'
+        changedName: '<prefix><c:gray>You have <c:green>successfully</c> changed the name of the group <group> to <value></c>'

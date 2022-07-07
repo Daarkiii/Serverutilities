@@ -35,7 +35,11 @@ class SetCMD(private val group: Group) : SubCommand {
             }
         }
 
-        val subCommands: List<SubCommand> = listOf(SetColorCMD(group), SetPotencyCMD(group))
+        val subCommands: List<SubCommand> = listOf(
+            SetColorCMD(group),
+            SetPotencyCMD(group),
+            SetNameCMD(group),
+            SetPermissionCMD(group))
 
         for(subCommand in subCommands) {
             for(name in subCommand.names) {
