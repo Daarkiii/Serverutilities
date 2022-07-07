@@ -1,13 +1,17 @@
 package me.daarkii.bungee.bungee.impl.`object`.user
 
 import me.daarkii.bungee.bungee.impl.BungeeImpl
+import me.daarkii.bungee.core.BungeeSystem
 import me.daarkii.bungee.core.config.impl.messages.Message
+import me.daarkii.bungee.core.`object`.Group
 import me.daarkii.bungee.core.`object`.User
 import me.daarkii.bungee.core.utils.PlaceHolder
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.md_5.bungee.api.ProxyServer
 import java.util.*
+import java.util.stream.Collectors
+import kotlin.collections.ArrayList
 
 abstract class BungeeUser(
     override val id: Long,
@@ -75,10 +79,6 @@ abstract class BungeeUser(
     override val isOnline: Boolean
         get() =  true
 
-    override fun addOnlineTime() {
-        this.onlineTime = this.onlineTime + 1
-    }
-
     abstract override fun connect(server: String)
 
     override fun kick(reason: String) {
@@ -108,6 +108,32 @@ abstract class BungeeUser(
     override fun executeCommand(cmd: String) {
         ProxyServer.getInstance().pluginManager.dispatchCommand(this.proxiedPlayer, cmd)
     }
+
+    override val groups: List<Group>
+        get() {
+            val groupHandler = BungeeSystem.getInstance().groupHandler
+            val userGroups: MutableList<Group> = ArrayList()
+
+            for(group in groupHandler.groups) {
+                if(this.hasPermission(group.permission) || group.default)
+                    userGroups.add(group)
+            }
+
+            return userGroups
+        }
+
+    override val highestGroup: Group
+        get() {
+
+            var highest: Group? = null
+
+            for(group in groups) {
+                if(highest == null || highest.potency < group.potency)
+                    highest = group
+            }
+
+            return highest!!
+        }
 
     private val proxiedPlayer
         get() = ProxyServer.getInstance().getPlayer(uuid)

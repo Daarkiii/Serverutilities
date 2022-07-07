@@ -10,8 +10,9 @@ class CloudNetOfflineUser(
     override val firstJoin: Long,
     override val lastJoin: Long,
     override var onlineTime: Long,
-    override val name: String
-) : BungeeOfflineUser(id, uuid, firstJoin, lastJoin, onlineTime, name) {
+    override val name: String,
+    private val groupID: Int
+) : BungeeOfflineUser(id, uuid, firstJoin, lastJoin, onlineTime, name, groupID) {
 
     override val displayName: String
         get() {

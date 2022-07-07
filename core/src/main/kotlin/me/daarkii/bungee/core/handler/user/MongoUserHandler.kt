@@ -112,7 +112,17 @@ class MongoUserHandler(mongo: MongoDB) : UserHandler {
      * @param user the user to safe
      */
     override fun saveData(user: User) {
-        TODO("Not yet implemented")
+
+        val document = Document()
+            .append("id", user.id)
+            .append("uuid", user.uuid.toString())
+            .append("name", user.name)
+            .append("firstJoin", user.firstJoin)
+            .append("lastJoin", user.lastJoin)
+            .append("onlineTime", user.onlineTime)
+            .append("lastGroup", user.highestGroup.id)
+
+        this.collection.updateOne(Filters.eq("id", user.id), document)
     }
 
     /**
@@ -131,7 +141,8 @@ class MongoUserHandler(mongo: MongoDB) : UserHandler {
                 document.getString("name"),
                 document.getLong("firstJoin"),
                 document.getLong("lastJoin"),
-                document.getLong("onlineTime")
+                document.getLong("onlineTime"),
+                document.getInteger("lastGroup")
             )
 
         }
@@ -148,13 +159,6 @@ class MongoUserHandler(mongo: MongoDB) : UserHandler {
 
             if (!this.isExist(uuid)) {
 
-                println("Create")
-                println("Create")
-                println("Create")
-                println("Create")
-                println("Create")
-                println("Create")
-
                 val document = Document()
                     .append("id", this.generateID())
                     .append("uuid", uuid.toString())
@@ -162,6 +166,7 @@ class MongoUserHandler(mongo: MongoDB) : UserHandler {
                     .append("firstJoin", System.currentTimeMillis())
                     .append("lastJoin", System.currentTimeMillis())
                     .append("onlineTime", (0).toLong())
+                    .append("lastGroup", 1)
 
                 collection.insertOne(document)
             }

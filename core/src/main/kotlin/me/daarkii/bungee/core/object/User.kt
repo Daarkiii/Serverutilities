@@ -4,8 +4,6 @@ import net.kyori.adventure.text.Component
 
 interface User : CommandSender, GenericUser {
 
-    fun addOnlineTime()
-
     fun connect(server: String)
 
     fun kick(reason: String)
@@ -17,5 +15,9 @@ interface User : CommandSender, GenericUser {
     val serverName: String
 
     val ping: Int
+
+    val highestGroup: Group
+
+    val groups: List<Group>
 
 }
