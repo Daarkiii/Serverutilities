@@ -23,6 +23,12 @@ interface GroupHandler {
     fun getGroup(id: Int) : CompletableFuture<Group?>
 
     /**
+     * Gets the cached default group
+     * @return the group object
+     */
+    val defaultGroup: Group
+
+    /**
      * Gets the name of the group with the id
      * @return the name of the group with the id or null
      */

@@ -26,37 +26,37 @@ class GroupCMD(private val bungee: BungeeSystem) : SubCommendable(
 
         bungee.groupHandler.getGroup(args[0]).thenAccept { group ->
 
-            println(args[0])
-            println(args[0])
-
-            println(group)
-            println(group)
-
             if(group == null) {
                 sender.sendMessage(config.getString("$messagePath.notExist"))
                 return@thenAccept
             }
 
-            val subCommand = SetCMD(group)
+            val subCommands = listOf(SetCMD(group), InfoCMD(group))
+
+            val finalArgs: MutableList<String> = LinkedList()
+            var isExecuted = false
+
+            for (line in args) {
+                if(line != args[0])
+                    finalArgs.add(line)
+            }
 
             if(args.size > 1) {
 
-                val finalArgs: MutableList<String> = LinkedList()
-
-                for (line in args) {
-                    if(line != args[0])
-                        finalArgs.add(line)
-                }
-
-                for(name in subCommand.names) {
-                    if(args[1] == name) {
-                        subCommand.execute(sender, finalArgs.toTypedArray())
-                        return@thenAccept
+                for(subCommand in subCommands) {
+                    for(name in subCommand.names) {
+                        if(args[1].equals(name, ignoreCase = true)) {
+                            subCommand.execute(sender, finalArgs.toTypedArray())
+                            isExecuted = true
+                        }
                     }
                 }
+
+                if(isExecuted)
+                    return@thenAccept
             }
 
-            sender.executeCommand(bungee.commandFile.getString("group.name") + " info " + args[0])
+            InfoCMD(group).execute(sender, finalArgs.toTypedArray())
         }
     }
 

@@ -39,7 +39,8 @@ class SetCMD(private val group: Group) : SubCommand {
             SetColorCMD(group),
             SetPotencyCMD(group),
             SetNameCMD(group),
-            SetPermissionCMD(group))
+            SetPermissionCMD(group),
+            SetDefaultCMD(group))
 
         for(subCommand in subCommands) {
             for(name in subCommand.names) {

@@ -6,6 +6,7 @@ import me.daarkii.bungee.core.storage.MongoDB
 import org.bson.Document
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
+import java.util.stream.Collectors
 
 class MongoGroupHandler(mongo: MongoDB) : GroupHandler {
 
@@ -22,7 +23,7 @@ class MongoGroupHandler(mongo: MongoDB) : GroupHandler {
                 return@thenApply group
 
             val nextID = (collection.countDocuments() + 1).toInt()
-            val created = Group(nextID, name, potency, permission, color)
+            val created = Group(nextID, name, potency, permission, color, false)
 
             //add to the cache
             groupCache[name] = created
@@ -41,7 +42,6 @@ class MongoGroupHandler(mongo: MongoDB) : GroupHandler {
      * @return the group object if the group is existing otherwise null
      */
     override fun getGroup(name: String): CompletableFuture<Group?> {
-        println(groupCache)
         return CompletableFuture.supplyAsync { groupCache[name] }
     }
 
@@ -58,6 +58,9 @@ class MongoGroupHandler(mongo: MongoDB) : GroupHandler {
             this.getGroup(it).join()
         }
     }
+
+    override val defaultGroup: Group
+        get() = groups.stream().filter(Group::default).collect(Collectors.toList())[0]
 
     /**
      * Gets the name of the group with the id
@@ -78,6 +81,7 @@ class MongoGroupHandler(mongo: MongoDB) : GroupHandler {
             .append("potency", group.potency)
             .append("permission", group.permission)
             .append("color", group.color)
+            .append("default", group.default)
 
         if(this.collection.find(Filters.eq("id", group.id)).first() != null)
             this.collection.replaceOne(Filters.eq("id", group.id), document)
@@ -100,6 +104,7 @@ class MongoGroupHandler(mongo: MongoDB) : GroupHandler {
                 .append("potency", 0)
                 .append("permission", "")
                 .append("color", "&7")
+                .append("default", true)
 
             this.collection.insertOne(document)
         }
@@ -111,7 +116,8 @@ class MongoGroupHandler(mongo: MongoDB) : GroupHandler {
                 document.getString("name"),
                 document.getInteger("potency"),
                 document.getString("permission"),
-                document.getString("color"))
+                document.getString("color"),
+                document.getBoolean("default"))
 
             this.groupCache[group.name] = group
         }

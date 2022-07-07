@@ -22,19 +22,30 @@ messages:
         addonColor: '<c:green>'
       group:
         help: "<prefix><c:gray>group-help</c> <newLine>
-         <c:dark_gray>»</c> <c:gray>group<c:aqua>create</c> {name} {potency} </c> <newLine>
-        <c:dark_gray>»</c> <c:gray>group <c:aqua>info</c>{name}/{id} </c> <newLine> 
-        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c>set color {color} </c> <newLine> 
-        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c>set permission {permission} </c> <newLine> 
+        <c:dark_gray>»</c> <c:gray>group<c:aqua>create</c> {name} {potency} </c> <newLine>
+        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c> info </c> <newLine> 
+        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c> set color {color} </c> <newLine> 
+        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c> set permission {permission} </c> <newLine> 
         <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c> set name {newName}</c> <newLine> 
-        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c> set potency {potency}</c>"
+        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c> set potency {potency}</c> <newLine>
+        <c:dark_gray>»</c> <c:gray>group <c:aqua>{name}</c> set default {value}</c>"
         notExist: "<prefix><c:gray>The group <c:aqua><name></c> doesn't exist!</c>"
         existAlready: "<prefix><c:gray>The group <c:aqua><name></c> exist already.</c>"
         noNumber: '<prefix><c:gray>The potency <c:red>must</c> be a number!</c>'
         falsePotency: '<prefix><c:gray>The potency must be between <c:gold>1-100</c>!</c>'
         falseColor: '<prefix><c:gray>The color c:red>must</c> be a minecraft color code!</c>'
+        falseValue: '<prefix><c:gray>The default value <c:red>must</c> be true or false!</c>'
         groupCreated: '<prefix><c:gray>>You created the group <name> <c:green>successfully</c>!</c>'
         changedPotency: '<prefix><c:gray>You have <c:green>successfully</c> changed the potency of the group <group> to <value></c>'
         changedColor: '<prefix><c:gray>You have <c:green>successfully</c> changed the color of the group <group> to <value></c>'
         changedPermission: '<prefix><c:gray>You have <c:green>successfully</c> changed the permission of the group <group> to <value></c>'
         changedName: '<prefix><c:gray>You have <c:green>successfully</c> changed the name of the group <group> to <value></c>'
+        changedDefault: '<prefix><group> <c:gray>is now the default group</c>'
+        alreadyDefaultGroup: '<prefix><group> <c:gray>is already the default group</c>'
+        canOnlyBeTrue: '<prefix><c:gray>The value can only be true!</c>'
+        info: '<prefix><c:gray>group-info</c> <newLine>
+        <c:dark_gray>»</c> <:gray>name:</c> <coloredname> <newLine>
+        <c:dark_gray>»</c> <:gray>color:</c> <c:aqua><color></c> <newLine>
+        <c:dark_gray>»</c> <:gray>potency:</c> <c:aqua><potency></c> <newLine>
+        <c:dark_gray>»</c> <:gray>permission:</c> <c:aqua><permission></c> <newLine>
+        <c:dark_gray>»</c> <:gray>default-group:</c> <c:aqua><default></c>'
