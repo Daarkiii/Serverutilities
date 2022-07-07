@@ -16,16 +16,16 @@
 
 package me.daarkii.bungee.core.command.impl.group
 
+import me.daarkii.bungee.core.BungeeSystem
 import me.daarkii.bungee.core.command.SubCommand
 import me.daarkii.bungee.core.config.impl.messages.Message
 import me.daarkii.bungee.core.`object`.CommandSender
 import me.daarkii.bungee.core.`object`.Group
 import me.daarkii.bungee.core.utils.PlaceHolder
-import net.kyori.adventure.text.Component
 
-class InfoCMD(private val group: Group) : SubCommand {
+class SetDefaultGroupCMD(private val group: Group) : SubCommand {
 
-    override val names: MutableList<String> = mutableListOf("info", "infos")
+    override val names: MutableList<String> = mutableListOf("default")
 
     private val config = Message.instance.config
     private val messagePath = "messages.commands.group"
@@ -36,13 +36,31 @@ class InfoCMD(private val group: Group) : SubCommand {
      * @param args The arguments of the main command, without args[0]
      */
     override fun execute(sender: CommandSender, args: Array<String>) {
-        sender.sendMessage(config.getString("$messagePath.info"),
-            PlaceHolder("name", group.name),
-            PlaceHolder("coloredname", Message.Wrapper.wrap(group.color + group.name + "</c>")),
-            PlaceHolder("color", Component.text(group.color)),
-            PlaceHolder("potency", group.potency.toString()),
-            PlaceHolder("permission", group.permission),
-            PlaceHolder("default", group.default.toString()))
+
+        val value = args[0].toBooleanStrictOrNull()
+
+        if(value == null) {
+            sender.sendMessage(config.getString("$messagePath.falseValue"))
+            return
+        }
+
+        if(!value) {
+            sender.sendMessage(config.getString("$messagePath.canOnlyBeTrue"))
+            return
+        }
+
+        val defaultGroup = BungeeSystem.getInstance().groupHandler.defaultGroup
+
+        if(defaultGroup == group) {
+            sender.sendMessage(config.getString("$messagePath.alreadyDefaultGroup"),
+                PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")))
+            return
+        }
+
+        group.default = value
+        defaultGroup.default = false
+
+        sender.sendMessage(config.getString("$messagePath.changedDefault"), PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")))
     }
 
 }

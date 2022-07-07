@@ -16,16 +16,16 @@
 
 package me.daarkii.bungee.core.command.impl.group
 
-import me.daarkii.bungee.core.BungeeSystem
 import me.daarkii.bungee.core.command.SubCommand
 import me.daarkii.bungee.core.config.impl.messages.Message
 import me.daarkii.bungee.core.`object`.CommandSender
 import me.daarkii.bungee.core.`object`.Group
 import me.daarkii.bungee.core.utils.PlaceHolder
+import net.kyori.adventure.text.Component
 
-class SetNameCMD(private val group: Group) : SubCommand {
+class GroupInfoCMD(private val group: Group) : SubCommand {
 
-    override val names: MutableList<String> = mutableListOf("name", "alias", "names")
+    override val names: MutableList<String> = mutableListOf("info", "infos")
 
     private val config = Message.instance.config
     private val messagePath = "messages.commands.group"
@@ -36,26 +36,13 @@ class SetNameCMD(private val group: Group) : SubCommand {
      * @param args The arguments of the main command, without args[0]
      */
     override fun execute(sender: CommandSender, args: Array<String>) {
-
-        val name = args[0]
-
-        BungeeSystem.getInstance().groupHandler.getGroup(name).thenAccept {
-
-            if(it != null) {
-                sender.sendMessage(config.getString("$messagePath.existAlready"), PlaceHolder("name", Message.Wrapper.wrap(it.color + it.name + "</c>")))
-                return@thenAccept
-            }
-
-            //Update in Cache
-            BungeeSystem.getInstance().groupHandler.changeGroupName(group.name, group)
-
-            //Update the object and send message to the User
-            group.name = name
-
-            sender.sendMessage(config.getString("$messagePath.changedName"),
-                PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")),
-                PlaceHolder("value", Message.Wrapper.wrap(name)))
-        }
+        sender.sendMessage(config.getString("$messagePath.info"),
+            PlaceHolder("name", group.name),
+            PlaceHolder("coloredname", Message.Wrapper.wrap(group.color + group.name + "</c>")),
+            PlaceHolder("color", Component.text(group.color)),
+            PlaceHolder("potency", group.potency.toString()),
+            PlaceHolder("permission", group.permission),
+            PlaceHolder("default", group.default.toString()))
     }
 
 }

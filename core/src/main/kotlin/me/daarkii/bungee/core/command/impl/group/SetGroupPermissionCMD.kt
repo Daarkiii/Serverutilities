@@ -22,9 +22,9 @@ import me.daarkii.bungee.core.`object`.CommandSender
 import me.daarkii.bungee.core.`object`.Group
 import me.daarkii.bungee.core.utils.PlaceHolder
 
-class SetColorCMD(private val group: Group) : SubCommand {
+class SetGroupPermissionCMD(private val group: Group) : SubCommand {
 
-    override val names: MutableList<String> = mutableListOf("color")
+    override val names: MutableList<String> = mutableListOf("permission")
 
     private val config = Message.instance.config
     private val messagePath = "messages.commands.group"
@@ -36,26 +36,12 @@ class SetColorCMD(private val group: Group) : SubCommand {
      */
     override fun execute(sender: CommandSender, args: Array<String>) {
 
-        val replaced = args[0]
-            .replace("&", "")
-            .replace("§", "")
+        val permission = args[0]
 
-        if(replaced.length != 1) {
-            sender.sendMessage(config.getString("$messagePath.falseColor"))
-            return
-        }
-
-        val replaceable = "&$replaced"
-
-        if(!Message.Wrapper.migrate(replaceable).contains("<c")) {
-            sender.sendMessage(config.getString("$messagePath.falseColor"))
-            return
-        }
-
-        group.color = "&$replaced"
-        sender.sendMessage(config.getString("$messagePath.changedColor"),
+        group.permission = permission
+        sender.sendMessage(config.getString("$messagePath.changedPermission"),
             PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")),
-            PlaceHolder("value", "&$replaced")
+            PlaceHolder("value", Message.Wrapper.wrap(permission))
         )
     }
 
