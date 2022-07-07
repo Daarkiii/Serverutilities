@@ -21,7 +21,7 @@ import com.zaxxer.hikari.HikariDataSource
 import me.daarkii.bungee.core.config.Config
 import javax.sql.DataSource
 
-class MySQL(private val settings: Config) {
+class MySQL(private val settings: Config, private val pluginName: String) {
 
     private val hikariConfig: HikariConfig = HikariConfig()
     private var dataSourceObj: HikariDataSource? = null
@@ -35,7 +35,7 @@ class MySQL(private val settings: Config) {
      * Starts a new Datasource
      */
     private fun connect() {
-        hikariConfig.jdbcUrl = "jdbc:mysql://" + settings.getString("mysql.host") + ":" + settings.getString("mysql.port")  + "/" + settings.getString("mysql.database")
+        hikariConfig.jdbcUrl = "jdbc:mysql://" + settings.getString("mysql.host") + ":" + settings.getString("mysql.port")  + "/" + settings.getString("plugins.$pluginName.database")
         hikariConfig.username = settings.getString("mysql.user")
         hikariConfig.password = settings.getString("mysql.password")
         hikariConfig.addDataSourceProperty("cachePrepStmts", "true")

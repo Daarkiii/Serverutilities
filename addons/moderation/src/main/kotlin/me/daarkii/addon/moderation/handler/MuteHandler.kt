@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
-dependencies {
-    compileOnly(project(":core"))
+package me.daarkii.addon.moderation.handler
+
+interface MuteHandler {
 }

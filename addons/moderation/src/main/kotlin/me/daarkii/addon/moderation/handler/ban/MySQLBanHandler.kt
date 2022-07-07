@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-rootProject.name = "OpenSourceBungee"
-include("core")
-include("bukkit")
-include("bungeecord")
-include("addons")
+package me.daarkii.addon.moderation.handler.ban
 
-//Addons
-include("addons:moderation")
-findProject(":addons:moderation")?.name = "moderation"
+import me.daarkii.addon.moderation.handler.BanHandler
+
+class MySQLBanHandler : BanHandler {
+}

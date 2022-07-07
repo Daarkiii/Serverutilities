@@ -1,0 +1,4 @@
+name: Moderation-Addon
+version: 1.0.0
+author: Daarkii
+main: me.daarkii.addon.moderation.Moderation
