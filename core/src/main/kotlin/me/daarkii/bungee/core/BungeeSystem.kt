@@ -24,6 +24,7 @@ import me.daarkii.bungee.core.command.impl.TestCMD
 import me.daarkii.bungee.core.command.impl.group.GroupCMD
 import me.daarkii.bungee.core.config.Config
 import me.daarkii.bungee.core.config.impl.CommandFile
+import me.daarkii.bungee.core.config.impl.DatabaseFile
 import me.daarkii.bungee.core.config.impl.SettingFile
 import me.daarkii.bungee.core.config.impl.messages.Message
 import me.daarkii.bungee.core.data.UserRegistry
@@ -57,6 +58,7 @@ abstract class BungeeSystem(
     //Files
     lateinit var settingFile: Config
     lateinit var commandFile: Config
+    lateinit var databaseFile: DatabaseFile
 
     protected fun init() {
 
@@ -71,40 +73,8 @@ abstract class BungeeSystem(
         //Load Messages
         Message(this.settingFile.getString("language"), this.dataFolder)
 
-        //Connect to database
-        if(settingFile.getString("storage").equals("mysql", ignoreCase = true)) {
-
-            //Connect to mysql
-            this.mySQL = MySQL(settingFile)
-            this.logger.debug("Successfully connected to a mysql database")
-
-            //Let the plugin know that it should use mysql
-            Settings.instance.useMySQL = true
-
-        } else if(settingFile.getString("storage").equals("mongodb", ignoreCase = true)) {
-
-            //Connect to Mongo
-            val mongoUrl: String = if(settingFile.getBoolean("mongo.isOnLocalhost"))
-                "mongodb://" + settingFile.getString("mongo.host") + ":" + settingFile.getString("mongo.port") + "/?maxPoolSize=20&w=majority"
-            else
-                "mongodb://" + settingFile.getString("mongo.user") + ":" + settingFile.getString("mongo.password") + "@" + settingFile.getString("mongo.host") + ":" + settingFile.getString("mongo.port") + "/?maxPoolSize=20&w=majority"
-
-            this.mongo = MongoDB(mongoUrl)
-            this.mongo!!.connect(settingFile.getString("mongo.database"))
-
-            this.logger.debug("Successfully connected to a mongodb database")
-
-            //Let the plugin know that it should use mongodb
-            Settings.instance.useMongo = true
-            groupHandler = MongoGroupHandler(mongo!!)
-
-        } else {
-            this.logger.sendError("You have not selected a storage provider!")
-            this.logger.sendError("Shutting down...")
-
-            this.shutdown()
-            return
-        }
+        //Load Database and connect
+        databaseFile = DatabaseFile(this)
 
         //load Groups
         this.groupHandler.loadGroups()
@@ -132,9 +102,9 @@ abstract class BungeeSystem(
     val debugMode: Boolean
         get() = settingFile.getBoolean("debug")
 
-    private var mySQL: MySQL? = null
+    var mySQL: MySQL? = null
 
-    private var mongo: MongoDB? = null
+    var mongo: MongoDB? = null
 
     protected fun setInstance(bs: BungeeSystem) {
         instance = bs
@@ -148,7 +118,7 @@ abstract class BungeeSystem(
     /**
      * Disables this plugin
      */
-    protected abstract fun shutdown()
+    abstract fun shutdown()
 
     /**
      * Gets a Console Object for a specified Platform
