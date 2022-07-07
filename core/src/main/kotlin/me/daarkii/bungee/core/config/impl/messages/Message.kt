@@ -31,6 +31,10 @@ class Message(private val name: String, private val dataFolder: File) {
     init {
         this.load()
         instance = this
+
+        println(config.getString("messages.prefix"))
+        println(config.getString("messages.prefix"))
+        println(config.getString("messages.prefix"))
     }
 
     private fun load() {
@@ -39,9 +43,9 @@ class Message(private val name: String, private val dataFolder: File) {
         config = MessageFile(folder, name)
     }
 
-    val prefix = Wrapper.wrap(config.getString("messages.prefix"))
+    val prefix = MiniMessage.miniMessage().deserialize(Wrapper.migrate(config.getString("messages.prefix")))
 
-    val noPerms = Wrapper.wrap(config.getString("messages.user.noperms"), PlaceHolder("prefix", this.prefix))
+    val noPerms = Wrapper.wrap(config.getString("messages.user.noperms"))
 
     companion object {
         @JvmStatic
@@ -53,7 +57,7 @@ class Message(private val name: String, private val dataFolder: File) {
 
         @JvmStatic
         fun wrap(msg: String) : Component {
-            return MiniMessage.miniMessage().deserialize(this.migrate(msg))
+            return MiniMessage.miniMessage().deserialize(this.migrate(msg), Placeholder.component("prefix", instance.prefix))
         }
 
         @JvmStatic
@@ -62,11 +66,11 @@ class Message(private val name: String, private val dataFolder: File) {
             val list: MutableList<TagResolver> = ArrayList()
             placeHolder.iterator().forEach { holder -> list.add(Placeholder.component(holder.name, holder.component)) }
 
-            return MiniMessage.miniMessage().deserialize(this.migrate(msg), *list.toTypedArray())
+            return MiniMessage.miniMessage().deserialize(this.migrate(msg), Placeholder.component("prefix", instance.prefix),  *list.toTypedArray())
         }
 
         @JvmStatic
-        private fun migrate(value: String) : String {
+        fun migrate(value: String) : String {
 
             var current = value
             val builder = StringBuilder()
@@ -77,10 +81,10 @@ class Message(private val name: String, private val dataFolder: File) {
 
             current = current
                 .replace("&", "§")
-                .replace("§l", "<b>")
-                .replace("§o", "<i>")
-                .replace("§n", "<u>")
-                .replace("§m", "<st>")
+                .replace("§l", "<replace_b>")
+                .replace("§o", "<replace_i>")
+                .replace("§n", "<replace_u>")
+                .replace("§m", "<replace_st>")
 
             val boldArray = current.split("§")
 
@@ -91,20 +95,25 @@ class Message(private val name: String, private val dataFolder: File) {
 
                 builder.append(line)
 
-                if(line.contains("<b>"))
+                if(line.contains("<replace_b>"))
                     builder.append("</b>")
 
-                if(line.contains("<i>"))
+                if(line.contains("<replace_i>"))
                     builder.append("</i>")
 
-                if(line.contains("<u>"))
+                if(line.contains("<replace_u>"))
                     builder.append("</u>")
 
-                if(line.contains("<st>"))
+                if(line.contains("<replace_st>"))
                     builder.append("</st>")
             }
 
             current = builder.toString()
+
+            current.replace("<replace_b>", "<b>")
+            current.replace("<replace_i>", "<i>")
+            current.replace("<replace_u>", "<u>")
+            current.replace("<replace_st>", "<st>")
 
             // Now all Special characters are replaced, so only colors needs to be replaced now
             current = current

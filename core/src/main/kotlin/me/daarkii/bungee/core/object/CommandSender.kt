@@ -16,6 +16,7 @@
 
 package me.daarkii.bungee.core.`object`
 
+import me.daarkii.bungee.core.utils.PlaceHolder
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 
@@ -47,6 +48,13 @@ interface CommandSender {
     fun sendMessage(msg: String)
 
     /**
+     * Sends the given message to the command sender
+     * @param msg the message to send
+     * @param placeHolder which should be replaced
+     */
+    fun sendMessage(msg: String, vararg placeHolder: PlaceHolder)
+
+    /**
      * Sends the given component  to the command sender
      * @param component the component to send
      */
@@ -63,5 +71,10 @@ interface CommandSender {
      * @param miniMsg the not deserialized MiniMessage String
      */
     fun sendMiniMessage(miniMsg: String)
+
+    /**
+     * Executes the given command
+     */
+    fun executeCommand(cmd: String)
 
 }

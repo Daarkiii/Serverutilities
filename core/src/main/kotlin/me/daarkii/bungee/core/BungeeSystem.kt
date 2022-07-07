@@ -18,13 +18,17 @@ package me.daarkii.bungee.core
 
 import me.daarkii.bungee.core.addon.AddonHandler
 import me.daarkii.bungee.core.command.impl.AddonCMD
+import me.daarkii.bungee.core.command.impl.GroupsCMD
 import me.daarkii.bungee.core.handler.PluginHandler
 import me.daarkii.bungee.core.command.impl.TestCMD
+import me.daarkii.bungee.core.command.impl.group.GroupCMD
 import me.daarkii.bungee.core.config.Config
 import me.daarkii.bungee.core.config.impl.CommandFile
 import me.daarkii.bungee.core.config.impl.SettingFile
 import me.daarkii.bungee.core.config.impl.messages.Message
 import me.daarkii.bungee.core.data.UserRegistry
+import me.daarkii.bungee.core.handler.group.GroupHandler
+import me.daarkii.bungee.core.handler.group.MongoGroupHandler
 import me.daarkii.bungee.core.handler.user.MongoUserHandler
 import me.daarkii.bungee.core.handler.user.UserHandler
 import me.daarkii.bungee.core.`object`.Console
@@ -38,6 +42,7 @@ import me.daarkii.bungee.core.utils.Settings
 import java.io.File
 import java.util.*
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 
 abstract class BungeeSystem(
     val logger: Logger,
@@ -47,6 +52,7 @@ abstract class BungeeSystem(
 
     //Manages Addons and loads them
     lateinit var addonHandler: AddonHandler
+    lateinit var groupHandler: GroupHandler
 
     //Files
     lateinit var settingFile: Config
@@ -90,6 +96,7 @@ abstract class BungeeSystem(
 
             //Let the plugin know that it should use mongodb
             Settings.instance.useMongo = true
+            groupHandler = MongoGroupHandler(mongo!!)
 
         } else {
             this.logger.sendError("You have not selected a storage provider!")
@@ -99,6 +106,9 @@ abstract class BungeeSystem(
             return
         }
 
+        //load Groups
+        this.groupHandler.loadGroups()
+
         //enable Addons
         this.addonHandler = AddonHandler(this)
         this.addonHandler.loadAddons()
@@ -107,9 +117,16 @@ abstract class BungeeSystem(
         this.loadCommands()
     }
 
+    fun stop() {
+        CompletableFuture.runAsync { this.groupHandler.safeGroups() }
+        TimeUnit.SECONDS.sleep(1)
+    }
+
     private fun loadCommands() {
         this.pluginHandler.registerCommand(TestCMD())
         this.pluginHandler.registerCommand(AddonCMD(this))
+        this.pluginHandler.registerCommand(GroupCMD(this))
+        this.pluginHandler.registerCommand(GroupsCMD(this))
     }
 
     val debugMode: Boolean

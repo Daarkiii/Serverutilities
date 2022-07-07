@@ -109,7 +109,7 @@ class BungeeImpl(private val bungee: BungeeHook) : BungeeSystem(
 
             val id = userHandler.getID(uuid)
             val data = userHandler.loadData(id).join()
-            val user: OfflineUser = CloudNetOfflineUser(id, uuid, data[3] as Long, data[4] as Long, data[5] as Long, data[2] as String)
+            val user: OfflineUser = CloudNetOfflineUser(id, uuid, data[3] as Long, data[4] as Long, data[5] as Long, data[2] as String, data[6] as Int)
 
             UserRegistry.instance.createOfflineUser(user)
             user

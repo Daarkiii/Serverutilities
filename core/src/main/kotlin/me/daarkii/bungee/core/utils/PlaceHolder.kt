@@ -16,6 +16,24 @@
 
 package me.daarkii.bungee.core.utils
 
+import me.daarkii.bungee.core.config.impl.messages.Message
 import net.kyori.adventure.text.Component
 
-data class PlaceHolder(val name: String, val component: Component)
+class PlaceHolder {
+
+    var name: String = ""
+    var component: Component = Component.text("")
+
+    constructor(name: String, component: Component) {
+        this.name = name
+        this.component = component
+    }
+
+    constructor(name: String, value: String) {
+        this.name = name
+
+        if(value != "")
+            this.component = Message.Wrapper.wrap(value)
+    }
+
+}
