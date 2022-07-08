@@ -16,6 +16,7 @@
 
 package me.daarkii.addon.moderation.handler
 
+import me.daarkii.addon.moderation.`object`.Reason
 import java.util.concurrent.CompletableFuture
 
 interface BanHandler {
@@ -26,7 +27,7 @@ interface BanHandler {
      * @param id from the User object
      * @return true if he has an active ban
      */
-    fun hasBan(id: Long) : CompletableFuture<Void>
+    fun hasBan(id: Long) : CompletableFuture<Boolean>
 
     /**
      * Unban a User without marking the ban as manual unbanned

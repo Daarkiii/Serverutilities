@@ -16,13 +16,16 @@
 
 package me.daarkii.bungee.core.event.impl
 
+import me.daarkii.bungee.core.event.Cancellable
 import me.daarkii.bungee.core.`object`.User
 
-class JoinEvent(
+class ChatEvent(
+    override var isCancelled: Boolean,
     override val user: User,
-    var joinMessage: String
-) : GenericUserEvent() {
+    var message: String,
+    val isCommand: Boolean
+    ) : GenericUserEvent(), Cancellable {
 
-    override val isAsync = false
 
+    override val isAsync: Boolean = true
 }

@@ -18,11 +18,11 @@ package me.daarkii.bungee.core.event.impl
 
 import me.daarkii.bungee.core.`object`.User
 
-class JoinEvent(
+class LeaveEvent(
     override val user: User,
-    var joinMessage: String
-) : GenericUserEvent() {
+    var quitMessage: String
+    ) : GenericUserEvent() {
 
-    override val isAsync = false
+    override val isAsync: Boolean = true
 
 }

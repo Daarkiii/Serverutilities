@@ -14,15 +14,32 @@
  * limitations under the License.
  */
 
-package me.daarkii.bungee.core.event.impl
+package me.daarkii.addon.moderation.`object`
 
-import me.daarkii.bungee.core.`object`.User
+data class Reason(
+    val id: Int,
+    val name: String,
+    val display: String,
+    val length: Map<Int, Long>,
+    val types: Map<Int, Type>,
+    val points: Map<Int, Double>
+) {
 
-class JoinEvent(
-    override val user: User,
-    var joinMessage: String
-) : GenericUserEvent() {
+    override fun equals(other: Any?): Boolean {
 
-    override val isAsync = false
+        if(other == null)
+            return false
 
+        if(this === other)
+            return true
+
+        if(other !is Reason)
+            return false
+
+        return other.id == id
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
 }

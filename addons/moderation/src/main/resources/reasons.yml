@@ -1,0 +1,48 @@
+# BanAddon by Daarkii
+#
+# example:
+# 1: | The id which moderators can use for punishing
+#   name: 'Hacks' | The name which moderators can use for punishing
+#   display: '&4Hacks' | The name which is displayed at the Reason display for example
+#   lengths: | The punishments get longer and longer as time goes on,
+#           list the number of bans and the corresponding length of the bans here
+#    1:
+#      number: 14 | Select -1 for a permanent punishment
+#      interval: 'd' | The user is penalized with this interval for the time set above, Possible types: y, m, w, d, h, mm, s
+#      type: 'BAN' | Select BAN for a Ban and MUTE for a Mute
+#      points: 1 | This number is added to the user's points in the punishment
+
+1:
+  name: 'Hacks'
+  display: '&4Hacks'
+  lengths:
+    1:
+      number: 14
+      interval: 'd'
+      type: 'BAN'
+      points: 14
+    2:
+      number: -1
+      interval: 'd'
+      type: 'BAN'
+      points: 100
+2:
+  name: 'Insult'
+  display: '&cInsult'
+  pointsPerDay: 1
+  lengths:
+    1:
+      number: 2
+      interval: 'd'
+      type: 'MUTE'
+      points: 0.5
+    2:
+      number: 7
+      interval: 'd'
+      type: 'MUTE'
+      points: 3.5
+    3:
+      number: 30
+      interval: 'd'
+      type: 'MUTE'
+      points: 15

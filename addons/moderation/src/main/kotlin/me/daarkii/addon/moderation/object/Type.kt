@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-package me.daarkii.bungee.core.event.impl
+package me.daarkii.addon.moderation.`object`
 
-import me.daarkii.bungee.core.`object`.User
+enum class Type {
 
-class JoinEvent(
-    override val user: User,
-    var joinMessage: String
-) : GenericUserEvent() {
+    MUTE,
+    BAN;
 
-    override val isAsync = false
+    companion object {
+
+        @JvmStatic
+        fun fromString(value: String) : Type? {
+            return when(value) {
+                "MUTE" -> MUTE
+                "BAN" -> BAN
+                else -> null
+            }
+        }
+
+    }
 
 }

@@ -22,8 +22,6 @@ class Cache {
         instance = this
     }
 
-
-
     companion object {
         @JvmStatic
         lateinit var instance: Cache

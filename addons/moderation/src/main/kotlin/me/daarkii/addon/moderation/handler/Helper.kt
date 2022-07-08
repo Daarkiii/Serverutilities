@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package me.daarkii.bungee.core.event.impl
+package me.daarkii.addon.moderation.handler
 
-import me.daarkii.bungee.core.`object`.User
+import me.daarkii.addon.moderation.`object`.Reason
 
-class JoinEvent(
-    override val user: User,
-    var joinMessage: String
-) : GenericUserEvent() {
+class Helper {
 
-    override val isAsync = false
+    private val reasons: MutableCollection<Reason> = ArrayList()
 
+    /**
+     * registers every set upped reason from the config
+     */
+    fun setupReasons(reasons: List<Reason>) {
+        this.reasons.addAll(reasons)
+    }
 }

@@ -17,6 +17,14 @@
 package me.daarkii.addon.moderation
 
 import me.daarkii.addon.moderation.config.ConfigFile
+import me.daarkii.addon.moderation.config.ReasonFile
+import me.daarkii.addon.moderation.handler.BanHandler
+import me.daarkii.addon.moderation.handler.Helper
+import me.daarkii.addon.moderation.handler.MuteHandler
+import me.daarkii.addon.moderation.handler.ban.MongoBanHandler
+import me.daarkii.addon.moderation.handler.ban.MySQLBanHandler
+import me.daarkii.addon.moderation.handler.mute.MongoMuteHandler
+import me.daarkii.addon.moderation.handler.mute.SQLMuteHandler
 import me.daarkii.bungee.core.addon.Addon
 import me.daarkii.bungee.core.addon.AddonInfo
 import me.daarkii.bungee.core.config.Config
@@ -30,20 +38,34 @@ class Moderation(addonInfo: AddonInfo) : Addon(addonInfo) {
     var mysql: MySQL? = null
     var mongoDB: MongoDB? = null
 
+    //handler
+    lateinit var helper: Helper
+    lateinit var banHandler: BanHandler
+    lateinit var muteHandler: MuteHandler
+
     //files
     lateinit var config: Config
+    lateinit var reasonFile: Config
 
     override fun onStart() {
 
         instance = this
 
+        //register helper
+        this.helper = Helper()
+
         //load Files
         config = ConfigFile(this.dataFolder)
+        reasonFile = ReasonFile(this)
 
         //connect to the database
         this.connectToDatabase()
     }
 
+    /**
+     * Sets the database settings for this plugin in the database file and
+     * loads them out and connect to the selected database
+     */
     private fun connectToDatabase() {
 
         val databaseFile = this.system.databaseFile
@@ -65,8 +87,9 @@ class Moderation(addonInfo: AddonInfo) : Addon(addonInfo) {
             mysql = MySQL(databaseFile, "moderation")
             system.logger.debug("Successfully connected to a mysql database")
 
-            //Let the plugin know that it should use mysql
-            Settings.instance.useMySQL = true
+            //register handlers
+            this.banHandler = MySQLBanHandler()
+            this.muteHandler = SQLMuteHandler()
 
         } else if(databaseFile.getString("plugins.dbutilities.storage").equals("mongodb", ignoreCase = true)) {
 
@@ -80,6 +103,10 @@ class Moderation(addonInfo: AddonInfo) : Addon(addonInfo) {
             mongoDB!!.connect(databaseFile.getString("plugins.dbutilities.database"))
 
             system.logger.debug("Successfully connected to a mongodb database")
+
+            //register handlers
+            this.banHandler = MongoBanHandler(mongoDB!!)
+            this.muteHandler = MongoMuteHandler()
         }
     }
 

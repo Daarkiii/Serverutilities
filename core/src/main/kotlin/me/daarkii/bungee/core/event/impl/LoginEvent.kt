@@ -16,13 +16,17 @@
 
 package me.daarkii.bungee.core.event.impl
 
+import me.daarkii.bungee.core.event.Cancellable
 import me.daarkii.bungee.core.`object`.User
 
-class JoinEvent(
-    override val user: User,
-    var joinMessage: String
-) : GenericUserEvent() {
+class LoginEvent(
+    override val user: User
+    ) : GenericUserEvent(), Cancellable {
 
-    override val isAsync = false
+    override val isAsync: Boolean = true
+
+    override var isCancelled: Boolean = false
+
+    var cancelReason: String = ""
 
 }
