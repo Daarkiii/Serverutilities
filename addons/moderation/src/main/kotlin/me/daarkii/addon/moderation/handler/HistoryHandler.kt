@@ -16,5 +16,49 @@
 
 package me.daarkii.addon.moderation.handler
 
+import me.daarkii.addon.moderation.`object`.History
+import me.daarkii.addon.moderation.`object`.HistoryEntry
+import java.util.concurrent.CompletableFuture
+
 interface HistoryHandler {
+
+    /**
+     * Creates a ban in the database and updates the cache if needed
+     *
+     * @param entry the entry
+     */
+    fun saveEntry(entry: HistoryEntry) : CompletableFuture<Void>
+
+    /**
+     * Gets a History object with given entries of the User
+     *
+     * @param userID the id of the User
+     * @return the History Object
+     */
+    fun getHistory(userID: Long) : CompletableFuture<History>
+
+    /**
+     * Gets a HistoryEntry with the given id out of the database
+     *
+     * @param id the id of the entry
+     * @return the entry if exists
+     */
+    fun getEntry(id: Int) : CompletableFuture<HistoryEntry?>
+
+    /**
+     * Gets a HistoryEntry with the given id out of the database if the Entry is not cached
+     *
+     * @param userID the id of the owner
+     * @param id the id of the entry
+     * @return the entry if exists
+     */
+    fun getEntry(userID: Long, id: Int) : CompletableFuture<HistoryEntry?>
+
+    /**
+     * Gets the next available id for a HistoryEntry
+     *
+     * @return the next id
+     */
+    val nextID: Int
+
 }

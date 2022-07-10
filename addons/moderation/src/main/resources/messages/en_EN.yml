@@ -1,0 +1,34 @@
+# English Config File
+#
+# This Plugin uses the MiniMessage Framework to create and send messages
+# You can create your own MiniMessages here: https://webui.adventure.kyori.net/
+# With this you can create Messages in every rgb color, add a hover text, make the message clickable and some internal stuff more
+# But you can also use normal Messages!
+
+messages:
+  prefix: '<color:green><b>Ban</b></color> <color:dark_gray>|</color> '
+  punish:
+    help: '<prefix><c:gray>Use <c:gold>/ban <user> <id>/<reason></c></c>'
+    notExist: '<prefix><c:gold><target></c> <c:gray>does not exist!</c>'
+    reasonNotExist: '<prefix><c:gold><reason></c> <c:gray>is not a available reason</c>'
+    alreadyPunished:
+      ban: '<prefix><user> <c:gray>is already banned, do you want to overwrite it?</c><button>'
+      banNoPermission: '<prefix><user> <c:gray>is already banned, ask a supervisor to override this ban</c>'
+      mute: '<prefix><user> <c:gray>is already muted, do you want to overwrite it?</c><button>'
+      muteNoPermission: '<prefix><user> <c:gray>is already muted, ask a supervisor to override this mute</c>'
+      button: "<click:run_command:'/ban <username> <reason> --override'><c:dark_gray>[<c:dark_red>OVERWRITE</c>]</c></click>"
+    successfully:
+      banned: '<prefix><c:gray>>You have successfully banned <user> for <c:red><reason></c>!</c>'
+      muted: '<prefix><c:gray>>You have successfully muted <user> for <c:red><reason></c>!</c>'
+    screen:
+      # No MiniMessage here!
+      banned:
+        default: '&7You have been &cbanned from YourNetwork.com for &e<days> days&7! 
+      &b
+      &7Reason: &c<reason>
+      &7Remaining time: &c<remaining>
+      &c
+      &7If you think it is a mistake, you can submit a unbanning
+      &7request at forum.yournetwork.com'
+        format: '&c<value> &7<interval>' # e.g. &c7 &7days
+      muted:

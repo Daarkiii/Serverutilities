@@ -38,7 +38,7 @@ class CreateGroupCMD : SubCommand {
 
         //<group> <create> || <name> <potency> <permission>
         if(args.size != 3) {
-            sender.sendMessage(config.getString("$messagePath.help"))
+            sender.sendMessage(config.getString("$messagePath.help"), PlaceHolder("prefix", Message.instance.prefix))
             return
         }
 
@@ -50,24 +50,24 @@ class CreateGroupCMD : SubCommand {
         kotlin.runCatching {
             potency = args[1].toInt()
         }.onFailure {
-            sender.sendMessage(config.getString("$messagePath.noNumber"))
+            sender.sendMessage(config.getString("$messagePath.noNumber"), PlaceHolder("prefix", Message.instance.prefix))
             return
         }
 
         if(potency < 1 || potency > 100) {
-            sender.sendMessage(config.getString("$messagePath.falsePotency"))
+            sender.sendMessage(config.getString("$messagePath.falsePotency"), PlaceHolder("prefix", Message.instance.prefix))
             return
         }
 
         BungeeSystem.getInstance().groupHandler.getGroup(name).thenAccept { group ->
 
             if(group != null) {
-                sender.sendMessage(config.getString("$messagePath.existAlready"), PlaceHolder("name", group.name))
+                sender.sendMessage(config.getString("$messagePath.existAlready"), PlaceHolder("name", group.name), PlaceHolder("prefix", Message.instance.prefix))
                 return@thenAccept
             }
 
             BungeeSystem.getInstance().groupHandler.createGroup(name, potency, permission, "&7").thenAccept { created ->
-                sender.sendMessage(config.getString("$messagePath.groupCreated"), PlaceHolder("name", created.name))
+                sender.sendMessage(config.getString("$messagePath.groupCreated"), PlaceHolder("name", created.name), PlaceHolder("prefix", Message.instance.prefix))
             }
 
         }

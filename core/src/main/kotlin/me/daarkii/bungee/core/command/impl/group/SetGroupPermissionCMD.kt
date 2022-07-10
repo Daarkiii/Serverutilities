@@ -40,6 +40,7 @@ class SetGroupPermissionCMD(private val group: Group) : SubCommand {
 
         group.permission = permission
         sender.sendMessage(config.getString("$messagePath.changedPermission"),
+            PlaceHolder("prefix", Message.instance.prefix),
             PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")),
             PlaceHolder("value", Message.Wrapper.wrap(permission))
         )

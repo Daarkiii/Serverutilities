@@ -16,7 +16,9 @@
 
 package me.daarkii.bungee.core.command
 
+import me.daarkii.bungee.core.config.impl.messages.Message
 import me.daarkii.bungee.core.`object`.CommandSender
+import me.daarkii.bungee.core.utils.PlaceHolder
 import java.util.*
 
 abstract class SubCommendable(name: String, permission: String, vararg aliases: String) : Command(name, permission, *aliases) {
@@ -24,7 +26,7 @@ abstract class SubCommendable(name: String, permission: String, vararg aliases: 
     override fun execute(sender: CommandSender, args: Array<out String>) {
 
         if(args.isEmpty()) {
-            sender.sendMessage(helpMsg)
+            sender.sendMessage(helpMsg, PlaceHolder("prefix", Message.instance.prefix))
             return
         }
 
@@ -58,7 +60,7 @@ abstract class SubCommendable(name: String, permission: String, vararg aliases: 
      * Default it will send the help message to the sender
      */
     open fun onFailure(sender: CommandSender, args: Array<out String>) {
-        sender.sendMessage(helpMsg)
+        sender.sendMessage(helpMsg, PlaceHolder("prefix", Message.instance.prefix))
     }
 
     abstract override fun getSubCommands(): MutableList<SubCommand>

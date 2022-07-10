@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 
-package me.daarkii.addon.moderation.handler.mute
+package me.daarkii.addon.moderation.config
 
-import me.daarkii.addon.moderation.handler.MuteHandler
+import me.daarkii.bungee.core.config.Config
+import java.io.File
 
-class MongoMuteHandler : MuteHandler {
+class MessageFile(folder: File, configName: String) : Config(File(folder, "$configName.yml"), "messages/$configName.yml") {
+
+    /**
+     * Gets called after the file is loaded
+     */
+    override fun afterLoad() {
+    }
 }

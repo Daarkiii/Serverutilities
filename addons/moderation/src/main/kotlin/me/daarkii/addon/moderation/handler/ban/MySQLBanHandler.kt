@@ -17,6 +17,35 @@
 package me.daarkii.addon.moderation.handler.ban
 
 import me.daarkii.addon.moderation.handler.BanHandler
+import java.util.concurrent.CompletableFuture
 
 class MySQLBanHandler : BanHandler {
+    /**
+     * Checks if a User is banned and unban him if the ban is expired
+     *
+     * @param id from the User object
+     * @return true if he has an active ban
+     */
+    override fun hasBan(id: Long): CompletableFuture<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    /**
+     * Unban a User without marking the ban as manual unbanned
+     *
+     * @param id from the User object
+     */
+    override fun unban(id: Long): CompletableFuture<Void> {
+        TODO("Not yet implemented")
+    }
+
+    /**
+     * Unban a User and marking the ban as resolved if the value is true
+     * @param shouldMark should be true if the ban was a false ban
+     *
+     * @param id from the User object
+     */
+    override fun unban(id: Long, shouldMark: Boolean): CompletableFuture<Void> {
+        TODO("Not yet implemented")
+    }
 }

@@ -23,10 +23,10 @@ import java.util.UUID
 
 data class HistoryEntry(
     val id: Int,
-    val owner: UUID,
-    val mod: UUID?, //if the console is the mod the uuid is null
+    val owner: Long,
+    val mod: Long, //if the console is the mod the id is 0
     val count: Int,
-    val reason: Reason,
+    val reason: Reason?,
     val start: Long,
     val end: Long,
     var unBanned: Boolean
@@ -35,7 +35,7 @@ data class HistoryEntry(
     /**
      * Gets the type of the reason
      */
-    val type = reason.types[count]!!
+    val type = reason?.types?.get(count) ?: Type.BAN
 
     /**
      * Gets the date where the punishment was created

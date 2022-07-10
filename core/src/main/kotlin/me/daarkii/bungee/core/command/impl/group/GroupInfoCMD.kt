@@ -37,6 +37,7 @@ class GroupInfoCMD(private val group: Group) : SubCommand {
      */
     override fun execute(sender: CommandSender, args: Array<String>) {
         sender.sendMessage(config.getString("$messagePath.info"),
+            PlaceHolder("prefix", Message.instance.prefix),
             PlaceHolder("name", group.name),
             PlaceHolder("coloredname", Message.Wrapper.wrap(group.color + group.name + "</c>")),
             PlaceHolder("color", Component.text(group.color)),

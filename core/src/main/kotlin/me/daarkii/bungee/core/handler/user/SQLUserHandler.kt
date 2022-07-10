@@ -49,6 +49,15 @@ class SQLUserHandler : UserHandler {
     }
 
     /**
+     * Gets the uuid from the given id
+     *
+     * @param id of the user
+     */
+    override fun getUUID(id: Long): UUID? {
+        TODO("Not yet implemented")
+    }
+
+    /**
      * Gets the id from the given uuid
      *
      * @param uuid of the user

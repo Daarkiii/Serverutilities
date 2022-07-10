@@ -37,19 +37,21 @@ class DeleteGroupCMD : SubCommand {
     override fun execute(sender: CommandSender, args: Array<String>) {
 
         if(args.size != 1) {
-            sender.sendMessage(config.getString("$messagePath.help"))
+            sender.sendMessage(config.getString("$messagePath.help"), PlaceHolder("prefix", Message.instance.prefix))
             return
         }
 
         BungeeSystem.getInstance().groupHandler.getGroup(args[0]).thenAccept { group ->
 
             if(group == null) {
-                sender.sendMessage(config.getString("$messagePath.notExist"), PlaceHolder("name", args[0]))
+                sender.sendMessage(config.getString("$messagePath.notExist"), PlaceHolder("name", args[0]), PlaceHolder("prefix", Message.instance.prefix))
                 return@thenAccept
             }
 
             BungeeSystem.getInstance().groupHandler.deleteGroup(group)
-            sender.sendMessage(config.getString("$messagePath.deletedGroup"), PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")))
+            sender.sendMessage(config.getString("$messagePath.deletedGroup"),
+                PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")),
+                PlaceHolder("prefix", Message.instance.prefix))
         }
 
     }

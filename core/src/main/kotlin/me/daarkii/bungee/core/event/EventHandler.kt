@@ -22,5 +22,5 @@ package me.daarkii.bungee.core.event
  *
  */
 @Retention(AnnotationRetention.RUNTIME)
-@Target
+@Target(AnnotationTarget.FUNCTION)
 annotation class EventHandler(val priority: EventPriority = EventPriority.NORMAL)

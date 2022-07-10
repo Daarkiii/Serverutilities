@@ -17,20 +17,19 @@
 package me.daarkii.addon.moderation
 
 import me.daarkii.addon.moderation.config.ConfigFile
+import me.daarkii.addon.moderation.config.MessageFile
 import me.daarkii.addon.moderation.config.ReasonFile
 import me.daarkii.addon.moderation.handler.BanHandler
 import me.daarkii.addon.moderation.handler.Helper
-import me.daarkii.addon.moderation.handler.MuteHandler
+import me.daarkii.addon.moderation.handler.HistoryHandler
 import me.daarkii.addon.moderation.handler.ban.MongoBanHandler
 import me.daarkii.addon.moderation.handler.ban.MySQLBanHandler
-import me.daarkii.addon.moderation.handler.mute.MongoMuteHandler
-import me.daarkii.addon.moderation.handler.mute.SQLMuteHandler
+import me.daarkii.addon.moderation.handler.history.MongoHistoryHandler
 import me.daarkii.bungee.core.addon.Addon
 import me.daarkii.bungee.core.addon.AddonInfo
 import me.daarkii.bungee.core.config.Config
 import me.daarkii.bungee.core.storage.MongoDB
 import me.daarkii.bungee.core.storage.MySQL
-import me.daarkii.bungee.core.utils.Settings
 
 class Moderation(addonInfo: AddonInfo) : Addon(addonInfo) {
 
@@ -41,11 +40,12 @@ class Moderation(addonInfo: AddonInfo) : Addon(addonInfo) {
     //handler
     lateinit var helper: Helper
     lateinit var banHandler: BanHandler
-    lateinit var muteHandler: MuteHandler
+    lateinit var historyHandler: HistoryHandler
 
     //files
     lateinit var config: Config
     lateinit var reasonFile: Config
+    lateinit var messages: Config
 
     override fun onStart() {
 
@@ -57,9 +57,45 @@ class Moderation(addonInfo: AddonInfo) : Addon(addonInfo) {
         //load Files
         config = ConfigFile(this.dataFolder)
         reasonFile = ReasonFile(this)
+        messages = MessageFile(dataFolder, config.getString("language"))
 
-        //connect to the database
+        //update files and connect to the database
+        this.updateFiles()
         this.connectToDatabase()
+    }
+
+    /**
+     * This Addon uses the command and database file of the main plugin
+     * Default the values for this plugin are not included, so we need to set them
+     */
+    private fun updateFiles() {
+
+        //Update database file
+        val databaseFile = this.system.databaseFile
+        val databaseConfiguration = databaseFile.configuration //ignore the null safety of the default getter
+
+        if(!databaseConfiguration.contains("plugins.moderation.storage"))
+            databaseConfiguration.set("plugins.moderation.storage", "mysql")
+
+        if(!databaseConfiguration.contains("plugins.moderation.database"))
+            databaseConfiguration.set("plugins.moderation.database", "moderation")
+
+        //Saves the new values
+        databaseFile.save()
+
+        //Update command file
+        val commandFile = this.system.commandFile
+        val commandConfiguration = commandFile.configuration
+
+        if(!commandConfiguration.contains("ban")) {
+            commandConfiguration.set("ban.name", "ban")
+            commandConfiguration.set("ban.permission", "bungee.ban")
+            commandConfiguration.set("ban.overridepermission", "bungee.ban.override")
+            commandConfiguration.set("ban.aliases", listOf("pun", "punish"))
+        }
+
+        //Saves the new values
+        commandConfiguration.save()
     }
 
     /**
@@ -69,16 +105,6 @@ class Moderation(addonInfo: AddonInfo) : Addon(addonInfo) {
     private fun connectToDatabase() {
 
         val databaseFile = this.system.databaseFile
-        val configuration = databaseFile.configuration //ignore the null safety of the default getter
-
-        if(!configuration.contains("plugins.moderation.storage"))
-            configuration.set("plugins.moderation.storage", "mysql")
-
-        if(!configuration.contains("plugins.moderation.database"))
-            configuration.set("plugins.moderation.database", "moderation")
-
-        //Saves the new values
-        databaseFile.save()
 
         //Connect to database
         if(databaseFile.getString("plugins.dbutilities.storage").equals("mysql", ignoreCase = true)) {
@@ -89,7 +115,6 @@ class Moderation(addonInfo: AddonInfo) : Addon(addonInfo) {
 
             //register handlers
             this.banHandler = MySQLBanHandler()
-            this.muteHandler = SQLMuteHandler()
 
         } else if(databaseFile.getString("plugins.dbutilities.storage").equals("mongodb", ignoreCase = true)) {
 
@@ -105,8 +130,8 @@ class Moderation(addonInfo: AddonInfo) : Addon(addonInfo) {
             system.logger.debug("Successfully connected to a mongodb database")
 
             //register handlers
-            this.banHandler = MongoBanHandler(mongoDB!!)
-            this.muteHandler = MongoMuteHandler()
+            this.banHandler = MongoBanHandler(this)
+            this.historyHandler = MongoHistoryHandler(mongoDB!!)
         }
     }
 

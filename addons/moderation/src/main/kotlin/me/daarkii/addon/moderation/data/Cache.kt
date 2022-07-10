@@ -16,11 +16,34 @@
 
 package me.daarkii.addon.moderation.data
 
+import me.daarkii.addon.moderation.`object`.History
+import java.util.concurrent.ConcurrentHashMap
+
 class Cache {
 
     init {
         instance = this
     }
+
+    private val userHistories: MutableMap<Long, History> = ConcurrentHashMap()
+
+    fun setHistory(userID: Long, history: History) {
+        this.userHistories[userID] = history
+    }
+
+    fun removeHistory(userID: Long) {
+        this.userHistories.remove(userID)
+    }
+
+    fun getHistory(userID: Long) : History? {
+       return this.userHistories[userID]
+    }
+
+    fun hasHistory(userID: Long) : Boolean {
+        return this.userHistories.containsKey(userID)
+    }
+
+    val histories = userHistories.values
 
     companion object {
         @JvmStatic

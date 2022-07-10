@@ -20,7 +20,6 @@ import me.daarkii.bungee.core.addon.AddonHandler
 import me.daarkii.bungee.core.command.impl.AddonCMD
 import me.daarkii.bungee.core.command.impl.GroupsCMD
 import me.daarkii.bungee.core.handler.PluginHandler
-import me.daarkii.bungee.core.command.impl.TestCMD
 import me.daarkii.bungee.core.command.impl.group.GroupCMD
 import me.daarkii.bungee.core.config.Config
 import me.daarkii.bungee.core.config.impl.CommandFile
@@ -29,7 +28,6 @@ import me.daarkii.bungee.core.config.impl.SettingFile
 import me.daarkii.bungee.core.config.impl.messages.Message
 import me.daarkii.bungee.core.data.UserRegistry
 import me.daarkii.bungee.core.handler.group.GroupHandler
-import me.daarkii.bungee.core.handler.group.MongoGroupHandler
 import me.daarkii.bungee.core.handler.user.MongoUserHandler
 import me.daarkii.bungee.core.handler.user.UserHandler
 import me.daarkii.bungee.core.`object`.Console
@@ -93,7 +91,6 @@ abstract class BungeeSystem(
     }
 
     private fun loadCommands() {
-        this.pluginHandler.registerCommand(TestCMD())
         this.pluginHandler.registerCommand(AddonCMD(this))
         this.pluginHandler.registerCommand(GroupCMD(this))
         this.pluginHandler.registerCommand(GroupsCMD(this))
@@ -133,10 +130,22 @@ abstract class BungeeSystem(
     abstract fun getUser(uuid: UUID) : CompletableFuture<User?>
 
     /**
+     * Gets a User Object for a specified Platform
+     * @return a CompletableFuture<User> with the User object
+     */
+    abstract fun getUser(id: Long) : CompletableFuture<User?>
+
+    /**
      * Gets a OfflineUser Object for a specified Platform
      * @return a CompletableFuture<OfflineUser> with the OfflineUser object
      */
     abstract fun getOfflineUser(uuid: UUID) : CompletableFuture<OfflineUser?>
+
+    /**
+     * Gets a OfflineUser Object for a specified Platform
+     * @return a CompletableFuture<OfflineUser> with the OfflineUser object
+     */
+    abstract fun getOfflineUser(id: Long) : CompletableFuture<OfflineUser?>
 
     abstract val pluginHandler: PluginHandler
 

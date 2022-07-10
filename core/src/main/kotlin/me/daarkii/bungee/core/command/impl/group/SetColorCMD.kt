@@ -41,21 +41,22 @@ class SetColorCMD(private val group: Group) : SubCommand {
             .replace("§", "")
 
         if(replaced.length != 1) {
-            sender.sendMessage(config.getString("$messagePath.falseColor"))
+            sender.sendMessage(config.getString("$messagePath.falseColor"), PlaceHolder("prefix", Message.instance.prefix))
             return
         }
 
         val replaceable = "&$replaced"
 
         if(!Message.Wrapper.migrate(replaceable).contains("<c")) {
-            sender.sendMessage(config.getString("$messagePath.falseColor"))
+            sender.sendMessage(config.getString("$messagePath.falseColor"), PlaceHolder("prefix", Message.instance.prefix))
             return
         }
 
         group.color = "&$replaced"
         sender.sendMessage(config.getString("$messagePath.changedColor"),
             PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")),
-            PlaceHolder("value", "&$replaced")
+            PlaceHolder("value", "&$replaced"),
+            PlaceHolder("prefix", Message.instance.prefix)
         )
     }
 

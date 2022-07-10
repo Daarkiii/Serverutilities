@@ -96,6 +96,19 @@ class BungeeImpl(private val bungee: BungeeHook) : BungeeSystem(
         }
     }
 
+    /**
+     * Gets a User Object for a specified Platform
+     * @return a CompletableFuture<User> with the User object
+     */
+    override fun getUser(id: Long): CompletableFuture<User?> {
+        val uuid = this.userHandler.getUUID(id) ?: return CompletableFuture.supplyAsync { null }
+        return this.getUser(uuid)
+    }
+
+    /**
+     * Gets a OfflineUser Object for a specified Platform
+     * @return a CompletableFuture<OfflineUser> with the OfflineUser object
+     */
     override fun getOfflineUser(uuid: UUID): CompletableFuture<OfflineUser?> {
         return CompletableFuture.supplyAsync{
 
@@ -114,6 +127,15 @@ class BungeeImpl(private val bungee: BungeeHook) : BungeeSystem(
             UserRegistry.instance.createOfflineUser(user)
             user
         }
+    }
+
+    /**
+     * Gets a OfflineUser Object for a specified Platform
+     * @return a CompletableFuture<OfflineUser> with the OfflineUser object
+     */
+    override fun getOfflineUser(id: Long): CompletableFuture<OfflineUser?> {
+        val uuid = this.userHandler.getUUID(id) ?: return CompletableFuture.supplyAsync { null }
+        return this.getOfflineUser(uuid)
     }
 
     companion object {

@@ -44,7 +44,7 @@ class GroupCMD(private val bungee: BungeeSystem) : SubCommendable(
         bungee.groupHandler.getGroup(args[0]).thenAccept { group ->
 
             if(group == null) {
-                sender.sendMessage(config.getString("$messagePath.notExist"), PlaceHolder("name", args[0]))
+                sender.sendMessage(config.getString("$messagePath.notExist"), PlaceHolder("name", args[0]), PlaceHolder("prefix", Message.instance.prefix))
                 return@thenAccept
             }
 

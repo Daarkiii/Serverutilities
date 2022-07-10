@@ -16,6 +16,7 @@
 
 package me.daarkii.addon.moderation.handler
 
+import me.daarkii.addon.moderation.`object`.HistoryEntry
 import me.daarkii.addon.moderation.`object`.Reason
 import java.util.concurrent.CompletableFuture
 
@@ -30,6 +31,21 @@ interface BanHandler {
     fun hasBan(id: Long) : CompletableFuture<Boolean>
 
     /**
+     * Checks if a User is muted and unmute him if the ban is expired
+     *
+     * @param id from the User object
+     * @return true if he has an active ban
+     */
+    fun hasMute(id: Long) : CompletableFuture<Boolean>
+
+    /**
+     * Registers a ban in the database
+     *
+     * @param entry the entry for the ban
+     */
+    fun create(entry: HistoryEntry) : CompletableFuture<Void>
+
+    /**
      * Unban a User without marking the ban as manual unbanned
      *
      * @param id from the User object
@@ -37,11 +53,26 @@ interface BanHandler {
     fun unban(id: Long) : CompletableFuture<Void>
 
     /**
-     * Unban a User and marking the ban as resolved if the value is true
-     * @param shouldMark should be true if the ban was a false ban
+     * Unmute a User without marking the ban as manual unbanned
      *
      * @param id from the User object
      */
-    fun unban(id: Long, shouldMark: Boolean) : CompletableFuture<Void>
+    fun unmute(id: Long) : CompletableFuture<Void>
+
+    /**
+     * Gets the id of the active ban entry of the User
+     *
+     * @param id of the User
+     * @return the id of the entry or 0
+     */
+    fun getActiveBanEntryID(id: Long) : CompletableFuture<Int>
+
+    /**
+     * Gets the id of the active mute entry of the User
+     *
+     * @param id of the User
+     * @return the id of the entry or 0
+     */
+    fun getActiveMuteEntryID(id: Long) : CompletableFuture<Int>
 
 }

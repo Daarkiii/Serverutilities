@@ -46,6 +46,7 @@ class GroupsCMD(private val bungee: BungeeSystem) : Command(
         }
 
         sender.sendMessage(config.getString("$messagePath.message"),
+            PlaceHolder("prefix", Message.instance.prefix),
             PlaceHolder("size", Component.text(groups.size)),
             PlaceHolder("groups", builder.toString())
         )

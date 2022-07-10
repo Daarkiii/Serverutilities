@@ -69,6 +69,21 @@ class MongoUserHandler(mongo: MongoDB) : UserHandler {
     }
 
     /**
+     * Gets the uuid from the given id
+     *
+     * @param id of the user
+     */
+    override fun getUUID(id: Long): UUID? {
+
+        val document = collection.find(Filters.eq("id", id)).first()
+
+        if(document.isNullOrEmpty())
+            return null
+
+        return UUID.fromString(document.getString("uuid"))
+    }
+
+    /**
      * Gets the id from the given uuid
      *
      * @param uuid of the user

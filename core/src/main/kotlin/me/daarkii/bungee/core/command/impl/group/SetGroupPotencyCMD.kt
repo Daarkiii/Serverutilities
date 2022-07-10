@@ -41,17 +41,18 @@ class SetGroupPotencyCMD(private val group: Group) : SubCommand {
         kotlin.runCatching {
             potency = args[0].toInt()
         }.onFailure {
-            sender.sendMessage(config.getString("$messagePath.noNumber"))
+            sender.sendMessage(config.getString("$messagePath.noNumber"), PlaceHolder("prefix", Message.instance.prefix))
             return
         }
 
         if(potency < 1 || potency > 100) {
-            sender.sendMessage(config.getString("$messagePath.falsePotency"))
+            sender.sendMessage(config.getString("$messagePath.falsePotency"), PlaceHolder("prefix", Message.instance.prefix))
             return
         }
 
         group.potency = potency
         sender.sendMessage(config.getString("$messagePath.changedPotency"),
+            PlaceHolder("prefix", Message.instance.prefix),
             PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")),
             PlaceHolder("value", Message.Wrapper.wrap(potency.toString()))
         )

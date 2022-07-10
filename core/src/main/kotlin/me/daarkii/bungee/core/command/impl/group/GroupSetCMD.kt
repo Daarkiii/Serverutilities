@@ -20,6 +20,7 @@ import me.daarkii.bungee.core.command.SubCommand
 import me.daarkii.bungee.core.config.impl.messages.Message
 import me.daarkii.bungee.core.`object`.CommandSender
 import me.daarkii.bungee.core.`object`.Group
+import me.daarkii.bungee.core.utils.PlaceHolder
 import java.util.LinkedList
 
 class GroupSetCMD(private val group: Group) : SubCommand {
@@ -38,7 +39,7 @@ class GroupSetCMD(private val group: Group) : SubCommand {
 
         //<group> <groupName> || <set> <color, potency..> <value>
         if(args.size != 3) {
-            sender.sendMessage(config.getString("$messagePath.help"))
+            sender.sendMessage(config.getString("$messagePath.help"), PlaceHolder("prefix", Message.instance.prefix))
             return
         }
 
@@ -70,7 +71,7 @@ class GroupSetCMD(private val group: Group) : SubCommand {
         }
 
         //There is no subcommand which equals the given name
-        sender.sendMessage(config.getString("$messagePath.help"))
+        sender.sendMessage(config.getString("$messagePath.help"), PlaceHolder("prefix", Message.instance.prefix))
     }
 
 }

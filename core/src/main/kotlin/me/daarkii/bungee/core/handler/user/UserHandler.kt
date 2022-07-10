@@ -53,6 +53,13 @@ interface UserHandler {
     fun getUUID(name: String) : UUID
 
     /**
+     * Gets the uuid from the given id
+     *
+     * @param id of the user
+     */
+    fun getUUID(id: Long) : UUID?
+
+    /**
      * Gets the id from the given uuid
      *
      * @param uuid of the user

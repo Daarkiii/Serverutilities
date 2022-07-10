@@ -42,7 +42,9 @@ class SetGroupNameCMD(private val group: Group) : SubCommand {
         BungeeSystem.getInstance().groupHandler.getGroup(name).thenAccept {
 
             if(it != null) {
-                sender.sendMessage(config.getString("$messagePath.existAlready"), PlaceHolder("name", Message.Wrapper.wrap(it.color + it.name + "</c>")))
+                sender.sendMessage(config.getString("$messagePath.existAlready"),
+                    PlaceHolder("name", Message.Wrapper.wrap(it.color + it.name + "</c>")),
+                    PlaceHolder("prefix", Message.instance.prefix))
                 return@thenAccept
             }
 
@@ -53,6 +55,7 @@ class SetGroupNameCMD(private val group: Group) : SubCommand {
             group.name = name
 
             sender.sendMessage(config.getString("$messagePath.changedName"),
+                PlaceHolder("prefix", Message.instance.prefix),
                 PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")),
                 PlaceHolder("value", Message.Wrapper.wrap(name)))
         }

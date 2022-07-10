@@ -5,3 +5,14 @@ useMuteFeature: true
 
 # Every time will be displayed like this format
 timeFormat: "yyyy-MM-dd HH:mm:ss"
+time:
+  permanent: 'Permanent'
+  day: 'day'
+  days: 'days'
+  hour: 'hour'
+  hours: 'hours'
+  minute: 'minute'
+  minutes: 'minutes'
+
+# Select your language here. Look into the messages' folder for available languages and names
+language: "en_EN"

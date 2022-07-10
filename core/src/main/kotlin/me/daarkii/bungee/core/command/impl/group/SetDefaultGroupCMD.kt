@@ -40,12 +40,12 @@ class SetDefaultGroupCMD(private val group: Group) : SubCommand {
         val value = args[0].toBooleanStrictOrNull()
 
         if(value == null) {
-            sender.sendMessage(config.getString("$messagePath.falseValue"))
+            sender.sendMessage(config.getString("$messagePath.falseValue"), PlaceHolder("prefix", Message.instance.prefix))
             return
         }
 
         if(!value) {
-            sender.sendMessage(config.getString("$messagePath.canOnlyBeTrue"))
+            sender.sendMessage(config.getString("$messagePath.canOnlyBeTrue"), PlaceHolder("prefix", Message.instance.prefix))
             return
         }
 
@@ -53,6 +53,7 @@ class SetDefaultGroupCMD(private val group: Group) : SubCommand {
 
         if(defaultGroup == group) {
             sender.sendMessage(config.getString("$messagePath.alreadyDefaultGroup"),
+                PlaceHolder("prefix", Message.instance.prefix),
                 PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")))
             return
         }
@@ -60,7 +61,9 @@ class SetDefaultGroupCMD(private val group: Group) : SubCommand {
         group.default = value
         defaultGroup.default = false
 
-        sender.sendMessage(config.getString("$messagePath.changedDefault"), PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")))
+        sender.sendMessage(config.getString("$messagePath.changedDefault"),
+            PlaceHolder("prefix", Message.instance.prefix),
+            PlaceHolder("group", Message.Wrapper.wrap(group.color + group.name + "</c>")))
     }
 
 }

@@ -25,7 +25,6 @@ class ConfigFile(dataFolder: File) : Config(File(dataFolder, "config.yml"), "con
      * Gets called after the file is loaded
      */
     override fun afterLoad() {
-        TODO("Not yet implemented")
     }
 
 }
