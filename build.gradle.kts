@@ -17,7 +17,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.0"
+    kotlin("jvm") version "1.7.10"
     id("java")
     id ("com.github.johnrengelman.shadow") version "7.0.0"
 }
@@ -39,6 +39,8 @@ allprojects {
         maven("https://repo.cloudnetservice.eu/repository/releases/")
         maven("https://oss.sonatype.org/content/repositories/snapshots")
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+
+        maven("https://repo.aysu.tv/repository/releases/")
     }
 }
 
